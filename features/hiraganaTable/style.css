@@ -1,0 +1,77 @@
+.hiragana-table-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.hiragana-section {
+    margin-bottom: 40px;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.hiragana-section h3 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.hiragana-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 15px;
+}
+
+.char-card {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s;
+    position: relative;
+    border: 2px solid #e9ecef;
+}
+
+.char-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.char-main {
+    font-size: 2.5em;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.char-romaji {
+    font-size: 0.9em;
+    color: #666;
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+
+.romaji-hidden .char-romaji {
+    opacity: 0;
+}
+
+.controls {
+    text-align: right;
+    margin-bottom: 25px;
+}
+
+.toggle-romaji {
+    background: #3498db;
+    color: white;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.toggle-romaji:hover {
+    background: #2980b9;
+}
