@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // Load feature mặc định
-    await loadFeature(features.hiragana);
+    await loadFeature(features.hiraganaTable);
 });
 
 async function loadFeature(feature) {
