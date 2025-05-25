@@ -41,3 +41,6 @@ export class HiraganaTable {
         });
     }
 }
+
+// Khởi tạo tự động khi feature được load
+new HiraganaTable();
