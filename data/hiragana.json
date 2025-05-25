@@ -1,0 +1,7 @@
+{
+    "characters": [
+        {"char": "あ", "romaji": "a"},
+        {"char": "い", "romaji": "i"},
+        ...
+    ]
+}
