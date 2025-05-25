@@ -102,3 +102,10 @@ class HiraganaTable {
 
 // [INITIALIZATION] - Khởi tạo feature khi load
 new HiraganaTable();
+
+// Thêm đoạn này vào cuối file để kiểm tra data
+console.log("Dữ liệu Hiragana:", this.hiraganaData);
+
+// Kiểm tra DOM container
+console.log("Basic container:", document.getElementById('basicHiragana'));
+console.log("Dakuten container:", document.getElementById('dakutenHiragana'));
