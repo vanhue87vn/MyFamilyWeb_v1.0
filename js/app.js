@@ -6,9 +6,9 @@ const features = {
         name: 'Hiragana Table',
         path: 'features/hiraganaTable'
     },
-    practiceDrill: {
+    practiceDrillHiragana: {
         name: 'Practice Drill For Hiragana',
-        path: 'features/practiceDrill'
+        path: 'features/practiceDrillHiragana'
     }
 };
 
