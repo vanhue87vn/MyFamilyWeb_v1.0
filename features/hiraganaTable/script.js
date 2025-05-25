@@ -1,22 +1,22 @@
 import { getJsonData } from '../../js/utils/helpers.js';
 
-export class HiraganaTable {
+class HiraganaTable {
     constructor() {
-        this.container = document.querySelector('.hiragana-table-container');
-        this.init();
+        this.initialize();
     }
 
-    async init() {
-        await this.loadData();
-        this.renderTable();
+    async initialize() {
+        // Load data từ JSON
+        this.hiraganaData = await getJsonData('hiragana');
+        
+        // Render bảng
+        this.renderTables();
+        
+        // Thêm event listeners
         this.addEventListeners();
     }
 
-    async loadData() {
-        this.hiraganaData = await getJsonData('hiragana');
-    }
-
-    renderTable() {
+    renderTables() {
         this.renderSection('basicHiragana', this.hiraganaData.basic);
         this.renderSection('dakutenHiragana', [
             ...this.hiraganaData.dakuten,
@@ -24,9 +24,9 @@ export class HiraganaTable {
         ]);
     }
 
-    renderSection(containerId, data) {
+    renderSection(containerId, characters) {
         const container = document.getElementById(containerId);
-        container.innerHTML = data.map(char => `
+        container.innerHTML = characters.map(char => `
             <div class="char-card">
                 <div class="char-main">${char.char}</div>
                 <div class="char-romaji">${char.romaji}</div>
@@ -37,10 +37,12 @@ export class HiraganaTable {
     addEventListeners() {
         // Toggle Romaji
         document.querySelector('.toggle-romaji').addEventListener('click', () => {
-            this.container.classList.toggle('romaji-hidden');
+            document.querySelectorAll('.char-romaji').forEach(el => {
+                el.classList.toggle('hidden');
+            });
         });
     }
 }
 
-// Khởi tạo tự động khi feature được load
+// Khởi tạo khi feature được load
 new HiraganaTable();
