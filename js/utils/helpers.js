@@ -8,8 +8,8 @@
  */
 export async function getJsonData(filename) {
     try {
-        const response = await fetch(`../data/${filename}.json`);
-        
+        //const response = await fetch(`../data/${filename}.json`); Sửa chỗ này.
+        const response = await fetch(`../../data/${filename}.json`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
