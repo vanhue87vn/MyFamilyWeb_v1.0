@@ -1,6 +1,12 @@
 const features = {
-    hiragana: { name: 'Hiragana', path: 'features/hiragana' },
-    katakana: { name: 'Katakana', path: 'features/katakana' }
+    hiraganaTable: {
+        name: 'Hiragana Table',
+        path: 'features/hiraganaTable'
+    },
+    practiceDrill: {
+        name: 'Practice Drill For Hiragana',
+        path: 'features/practiceDrill'
+    }
 };
 
 // Khởi tạo ứng dụng
