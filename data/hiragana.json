@@ -1,7 +1,17 @@
 {
-    "characters": [
+    "basic": [
         {"char": "あ", "romaji": "a"},
         {"char": "い", "romaji": "i"},
-        ...
+        {"char": "う", "romaji": "u"},
+        {"char": "え", "romaji": "e"},
+        {"char": "お", "romaji": "o"},
+    ],
+    "dakuten": [
+        {"char": "が", "romaji": "ga"},
+        {"char": "ぎ", "romaji": "gi"},
+    ],
+    "handakuten": [
+        {"char": "ぱ", "romaji": "pa"},
+        {"char": "ぴ", "romaji": "pi"},
     ]
 }
