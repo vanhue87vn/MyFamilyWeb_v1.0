@@ -9,14 +9,14 @@ MyFamilyWeb_v1.0/
 ├── data/  
 │   └── hiragana.json  
 ├── features/  
-│   ├── hiraganaTable/  
-│   │   ├── index.html  
-│   │   ├── script.js  
-│   │   └── style.css  
-│   └── practiceDrillHiragana/  
-│       ├── index.html  
-│       ├── script.js  
-│       └── style.css  
+│   ├── feature1/  
+│   │   ├── feature1.html  
+│   │   ├── feature1.js  
+│   │   └── feature1.css  
+│   └── feature2/  
+│       ├── feature2.html  
+│       ├── feature2.js  
+│       └── feature2.css  
 ├── js/  
 │   ├── utils/  
 │   │   └── helpers.js  
