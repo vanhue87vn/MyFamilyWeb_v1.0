@@ -1,2 +1,42 @@
 # MyFamilyWeb_v1.0
 This is me and my son to study HTML. For my family to study things.
+
+Follow is my Page structure.
+
+MyFamilyWeb_v1.0/  
+├── css/  
+│   └── main.css  
+├── data/  
+│   └── hiragana.json  
+├── features/  
+│   ├── hiraganaTable/  
+│   │   ├── index.html  
+│   │   ├── script.js  
+│   │   └── style.css  
+│   └── practiceDrillHiragana/  
+│       ├── index.html  
+│       ├── script.js  
+│       └── style.css  
+├── js/  
+│   ├── utils/  
+│   │   └── helpers.js  
+│   └── app.js  
+├── index.html  
+└── README.md  
+
+===========
+
+1.Main Page (index.html)
+Entry point of the application.
+
+2.Hiragana Table (features/hiraganaTable/)
+Interactive table displaying Hiragana characters.
+
+3.Practice Drill (features/practiceDrillHiragana/)
+Quiz-style drills for memorizing Hiragana.
+
+4.Data & Styling
+data/hiragana.json – Contains Hiragana character data.
+css/main.css – Global styles.
+js/app.js – Main JavaScript logic.
+js/utils/helpers.js – Utility functions.
