@@ -3,7 +3,7 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background: #000000;
+    background: #bdee8f;
 }
 
 .logo {
@@ -33,7 +33,7 @@
 }
 
 .hiragana-char {
-    font-size: 54px;
+    font-size: 64px;
     font-weight: bold;
 }
 
