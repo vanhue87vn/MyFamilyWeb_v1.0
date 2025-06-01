@@ -1,7 +1,7 @@
 // feature1.js
 document.addEventListener('DOMContentLoaded', function() {
     // Lấy dữ liệu từ file JSON
-    fetch('../../data/JSON/hiragana.json')
+    fetch('../../data/JSON/hiragana-basic.json')
         .then(response => response.json())
         .then(data => {
             renderHiraganaGrid(data);
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const charElement = document.createElement('div');
             charElement.className = 'hiragana-char';
-            charElement.textContent = charData.hiragana;
+            charElement.textContent = charData.character;
             
             const romajiElement = document.createElement('div');
             romajiElement.className = 'romaji';
