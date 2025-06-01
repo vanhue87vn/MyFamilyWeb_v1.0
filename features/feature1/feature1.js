@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const gridContainer = document.getElementById('hiraganaGrid');
         
         // Tạo 40 ô (5x8) cho bảng Hiragana
-        for (let i = 0; i < 40 && i < hiraganaData.length; i++) {
+        for (let i = 0; i < 48 && i < hiraganaData.length; i++) {
             const charData = hiraganaData[i];
             
             const card = document.createElement('div');
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const charElement = document.createElement('div');
             charElement.className = 'hiragana-char';
-            charElement.textContent = charData.character;
+            charElement.textContent = charData.hiragana;
             
             const romajiElement = document.createElement('div');
             romajiElement.className = 'romaji';
