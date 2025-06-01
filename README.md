@@ -7,7 +7,10 @@ MyFamilyWeb_v1.0/
 ├── css/  
 │   └── main.css  
 ├── data/  
-│   └── hiragana.json  
+│   ├── icons/  
+│   ├── images/  
+│   ├── JSON/  
+│   │   └── hiragana.json  
 ├── features/  
 │   ├── feature1/  
 │   │   ├── feature1.html  
