@@ -1,7 +1,7 @@
 // Game configuration
 const config = {
-    gridSize: 4, // 4x4 grid
-    initialTime: 30,
+    gridSize: 5, // 4x4 grid
+    initialTime: 10,
     maxMistakes: 3,
     timeDecreasePerLevel: 2,
     baseScorePerCorrect: 10
@@ -11,6 +11,7 @@ const config = {
 const elements = {
     hiraganaBoard: document.getElementById('hiraganaBoard'),
     ball: document.getElementById('ball'),
+    romajiDisplay: document.getElementById('romaji'), // Thêm hiển thị romaji
     message: document.getElementById('message'),
     timeDisplay: document.getElementById('time'),
     scoreDisplay: document.getElementById('score'),
@@ -24,7 +25,7 @@ const elements = {
 
 // Game state
 let state = {
-    currentHiragana: '',
+    currentCharacter: null, // Giờ sẽ lưu cả object character
     score: 0,
     level: 1,
     timeLeft: config.initialTime,
@@ -41,7 +42,10 @@ async function initGame() {
     try {
         // Load hiragana data from JSON
         const response = await fetch('../../data/JSON/hiragana-basic.json');
-        state.hiraganaData = await response.json();
+        const data = await response.json();
+        
+        // Lọc bỏ các ký tự trong ngoặc đơn (nếu muốn)
+        state.hiraganaData = data.filter(item => !item.character.startsWith('('));
         
         resetGameState();
         setupEventListeners();
@@ -84,14 +88,15 @@ function startNewRound() {
     
     // Create 4x4 grid
     const totalCells = config.gridSize * config.gridSize;
-    const selectedHiragana = getRandomHiragana(totalCells);
+    const selectedCharacters = getRandomCharacters(totalCells);
     
     // Display cells
-    for (let i = 0; i < totalCells; i++) {
+    selectedCharacters.forEach(char => {
         const cell = document.createElement('div');
         cell.className = 'hiragana-cell';
-        cell.textContent = selectedHiragana[i];
-        cell.dataset.hiragana = selectedHiragana[i];
+        cell.textContent = char.character;
+        cell.dataset.character = char.character;
+        cell.dataset.romaji = char.romaji;
         
         // Add event listeners
         cell.addEventListener('dragover', (e) => e.preventDefault());
@@ -100,23 +105,28 @@ function startNewRound() {
         
         elements.hiraganaBoard.appendChild(cell);
         state.cells.push(cell);
-    }
+    });
     
-    // Set ball character
+    // Set random character for the ball
     const randomIndex = Math.floor(Math.random() * totalCells);
-    state.currentHiragana = selectedHiragana[randomIndex];
-    elements.ball.textContent = state.currentHiragana;
+    state.currentCharacter = selectedCharacters[randomIndex];
+    elements.ball.textContent = state.currentCharacter.character;
+    
+    // Hiển thị romaji tương ứng
+    if (elements.romajiDisplay) {
+        elements.romajiDisplay.textContent = state.currentCharacter.romaji;
+    }
     
     // Start timer
     state.timer = setInterval(updateTimer, 100);
     
     // Update message
-    elements.message.textContent = `Find: ${state.currentHiragana}`;
+    elements.message.textContent = `Find: ${state.currentCharacter.character}`;
     elements.message.style.color = '#2d3436';
 }
 
-function getRandomHiragana(count) {
-    const shuffled = [...state.hiraganaData.characters].sort(() => 0.5 - Math.random());
+function getRandomCharacters(count) {
+    const shuffled = [...state.hiraganaData].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
 }
 
@@ -125,16 +135,16 @@ function handleDragStart(e) {
         e.preventDefault();
         return;
     }
-    e.dataTransfer.setData('text/plain', state.currentHiragana);
+    e.dataTransfer.setData('text/plain', state.currentCharacter.character);
 }
 
 function handleAnswer(e, cell) {
     if (e) e.preventDefault();
     if (!state.gameActive || !state.roundActive) return;
     
-    const selectedHiragana = cell.dataset.hiragana;
+    const selectedCharacter = cell.dataset.character;
     
-    if (selectedHiragana === state.currentHiragana) {
+    if (selectedCharacter === state.currentCharacter.character) {
         // Correct answer
         cell.classList.add('correct');
         state.score += config.baseScorePerCorrect * state.level;
