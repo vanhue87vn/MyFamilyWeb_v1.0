@@ -42,7 +42,9 @@
     {"hiragana": "も", "romaji": "mo"},
     
     {"hiragana": "や", "romaji": "ya"},
+    {"hiragana": "(い)", "romaji": "yi"},
     {"hiragana": "ゆ", "romaji": "yu"},
+    {"hiragana": "(え)", "romaji": "ye"},
     {"hiragana": "よ", "romaji": "yo"},
     
     {"hiragana": "ら", "romaji": "ra"},
