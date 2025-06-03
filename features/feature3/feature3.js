@@ -19,7 +19,7 @@ const config = {
 const square = {
     x: canvas.width / 2,
     y: canvas.height / 2,
-    size: config.initialSize * 2, // size là chiều dài cạnh
+    size: config.initialSize * 2,
     color: '#FF0000',
     score: 0
 };
@@ -62,7 +62,6 @@ function drawSquare() {
     ctx.beginPath();
     ctx.rect(square.x - square.size/2, square.y - square.size/2, square.size, square.size);
     
-    // Gradient cho hình vuông
     const gradient = ctx.createLinearGradient(
         square.x - square.size/2, square.y - square.size/2,
         square.x + square.size/2, square.y + square.size/2
@@ -87,11 +86,9 @@ function drawBot(bot) {
 
 // Kiểm tra va chạm giữa hình vuông và hình tròn
 function checkCollision(squareX, squareY, squareSize, circleX, circleY, circleRadius) {
-    // Tìm điểm gần nhất trên hình vuông so với hình tròn
     const closestX = Math.max(squareX - squareSize/2, Math.min(circleX, squareX + squareSize/2));
     const closestY = Math.max(squareY - squareSize/2, Math.min(circleY, squareY + squareSize/2));
     
-    // Tính khoảng cách từ điểm đó đến tâm hình tròn
     const distanceX = circleX - closestX;
     const distanceY = circleY - closestY;
     
@@ -104,7 +101,6 @@ function moveSquare() {
     const dy = targetY - square.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
     
-    // Tốc độ di chuyển phụ thuộc vào kích thước
     const speed = Math.max(5 - square.size / 40, 1);
     
     if (distance > 5) {
@@ -112,7 +108,6 @@ function moveSquare() {
         square.y += dy / distance * speed;
     }
     
-    // Giới hạn trong màn hình
     const halfSize = square.size/2;
     square.x = Math.max(halfSize, Math.min(canvas.width - halfSize, square.x));
     square.y = Math.max(halfSize, Math.min(canvas.height - halfSize, square.y));
@@ -121,11 +116,9 @@ function moveSquare() {
 // Di chuyển bot
 function moveBots() {
     bots.forEach(bot => {
-        // Di chuyển bot
         bot.x += bot.dx;
         bot.y += bot.dy;
         
-        // Đổi hướng khi chạm biên
         if (bot.x < bot.radius || bot.x > canvas.width - bot.radius) {
             bot.dx = -bot.dx;
             bot.x = Math.max(bot.radius, Math.min(canvas.width - bot.radius, bot.x));
@@ -135,7 +128,6 @@ function moveBots() {
             bot.y = Math.max(bot.radius, Math.min(canvas.height - bot.radius, bot.y));
         }
         
-        // Tránh hình vuông của người chơi
         const distX = square.x - bot.x;
         const distY = square.y - bot.y;
         const distance = Math.sqrt(distX * distX + distY * distY);
@@ -153,23 +145,18 @@ function checkEatBots() {
     for (let i = bots.length - 1; i >= 0; i--) {
         const bot = bots[i];
         if (checkCollision(square.x, square.y, square.size, bot.x, bot.y, bot.radius)) {
-            // Chỉ ăn được bot nhỏ hơn (so sánh đường chéo hình vuông với đường kính hình tròn)
             if (bot.radius * 2 < square.size * Math.sqrt(2)) {
-                // Tăng kích thước hình vuông
                 square.size += config.sizePerBot * 2;
                 square.score++;
                 
-                // Xóa bot
                 bots.splice(i, 1);
                 
-                // Cập nhật UI
                 document.getElementById('botCount').textContent = bots.length;
                 document.getElementById('size').textContent = Math.floor(square.size/2);
             }
         }
     }
     
-    // Kiểm tra chiến thắng
     if (bots.length === 0) {
         document.getElementById('gameOver').style.display = 'block';
     }
@@ -177,21 +164,15 @@ function checkEatBots() {
 
 // Game loop
 function gameLoop() {
-    // Xóa màn hình
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Di chuyển
     moveSquare();
     moveBots();
-    
-    // Kiểm tra va chạm
     checkEatBots();
     
-    // Vẽ
     bots.forEach(drawBot);
     drawSquare();
     
-    // Lặp lại
     requestAnimationFrame(gameLoop);
 }
 
