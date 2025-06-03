@@ -1,0 +1,71 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+h1 {
+    color: #e91e63;
+    text-align: center;
+}
+h2 {
+    color: #2196f3;
+    border-bottom: 2px solid #2196f3;
+    padding-bottom: 5px;
+}
+.exercise-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.exercise {
+    width: 48%;
+    margin-bottom: 20px;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.problem {
+    margin: 10px 0;
+    font-size: 18px;
+}
+input {
+    width: 50px;
+    padding: 5px;
+    font-size: 16px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+button:hover {
+    background-color: #388e3c;
+}
+.score {
+    font-size: 20px;
+    font-weight: bold;
+    color: #e91e63;
+    text-align: center;
+    margin: 20px 0;
+}
+.correct {
+    color: #4caf50;
+}
+.incorrect {
+    color: #f44336;
+}
+.feedback {
+    font-size: 14px;
+    margin-left: 10px;
+}
