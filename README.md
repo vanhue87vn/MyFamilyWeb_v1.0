@@ -3,15 +3,15 @@ This is me and my son to study HTML. For my family to study things.
 
 Follow is my Page structure.
 
-MyFamilyWeb_v1.0/  
-├── css/  
-│   └── main.css  
-├── data/  
-│   ├── icons/  
-│   ├── images/  
-│   ├── JSON/  
-│   │   └── hiragana.json  
-├── features/  
+MyFamilyWeb_v1.0/
+├── css/
+│   └── main.css
+├── data/
+│   ├── icons/
+│   ├── images/
+│   ├── JSON/
+│   │   └── hiragana.json
+├── features/
 │   ├── feature1/  
 │   │   ├── feature1.html  
 │   │   ├── feature1.js  

@@ -3,27 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bảng Cộng Trừ Đến 100 - Lớp 1</title>
-    <link rel="stylesheet" href="feature7.css">
+    <title>Cộng Trừ Đến 1000</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Bảng Cộng Trừ Đến 100</h1>
-    <h2>Phép Cộng Không Nhớ</h2>
-    <div class="exercise-container" id="additionNoCarry"></div>
-    
-    <h2>Phép Cộng Có Nhớ</h2>
-    <div class="exercise-container" id="additionWithCarry"></div>
-    
-    <h2>Phép Trừ Không Nhớ</h2>
-    <div class="exercise-container" id="subtractionNoBorrow"></div>
-    
-    <h2>Phép Trừ Có Nhớ</h2>
-    <div class="exercise-container" id="subtractionWithBorrow"></div>
-    
-    <div class="score">Điểm: <span id="totalScore">0</span>/20</div>
-    <button onclick="checkAnswers()">Kiểm Tra Kết Quả</button>
-    <button onclick="generateNewProblems()">Tạo Bài Tập Mới</button>
+    <div class="container">
+        <h1>Luyện Tập Cộng Trừ Đến 1000</h1>
+        
+        <div class="timer">
+            Thời gian: <span id="time">0</span> giây
+        </div>
+        
+        <div class="points">
+            Điểm: <span id="points">0</span>
+        </div>
+        
+        <div class="attempts">
+            Số lần thử còn lại: <span id="remainingAttempts">3</span>
+        </div>
+        
+        <div class="controls">
+            <button id="newProblem">Bài Mới</button>
+        </div>
+        
+        <div class="problem" id="problem">?</div>
+        
+        <input type="number" class="answer" id="answer" placeholder="Đáp án">
+        
+        <div class="result feedback" id="result"></div>
+        
+        <div class="score">
+            Đúng: <span id="correct">0</span> | 
+            Sai: <span id="incorrect">0</span>
+        </div>
+    </div>
 
-    <script src="feature7.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

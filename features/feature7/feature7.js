@@ -1,150 +1,134 @@
-let score = 0;
-const totalProblems = 20;
+let num1, num2, operator, correctAnswer;
+let correctCount = 0;
+let incorrectCount = 0;
+let totalPoints = 0;
+let startTime;
+let timerInterval;
+let currentDifficulty = 1;
+let alreadyAnswered = false;
+let remainingAttempts = 3;
 
-// Tạo bài tập khi trang được tải
-window.onload = function() {
-    generateProblems();
-};
+// Các phần tử DOM
+const problemEl = document.getElementById('problem');
+const answerEl = document.getElementById('answer');
+const resultEl = document.getElementById('result');
+const correctEl = document.getElementById('correct');
+const incorrectEl = document.getElementById('incorrect');
+const pointsEl = document.getElementById('points');
+const attemptsEl = document.getElementById('remainingAttempts');
+const newProblemBtn = document.getElementById('newProblem');
+const timeEl = document.getElementById('time');
 
-function generateProblems() {
-    generateAdditionNoCarry();
-    generateAdditionWithCarry();
-    generateSubtractionNoBorrow();
-    generateSubtractionWithBorrow();
+// Bắt đầu đếm thời gian
+function startTimer() {
+    startTime = new Date();
+    timerInterval = setInterval(() => {
+        const now = new Date();
+        const elapsed = Math.floor((now - startTime) / 1000);
+        timeEl.textContent = elapsed;
+    }, 1000);
 }
 
-function generateAdditionNoCarry() {
-    const container = document.getElementById('additionNoCarry');
-    container.innerHTML = '';
+// Tạo bài toán mới
+function generateNewProblem() {
+    operator = Math.random() < 0.5 ? '+' : '-';
     
-    for (let i = 0; i < 5; i++) {
-        let a, b;
-        // Đảm bảo không có nhớ (tổng các chữ số < 10)
-        do {
-            a = Math.floor(Math.random() * 50) + 1;
-            b = Math.floor(Math.random() * 50) + 1;
-        } while ((a % 10) + (b % 10) >= 10 || a + b > 100);
-        
-        createProblem(container, a, '+', b);
+    // Điều chỉnh độ khó dựa trên điểm số
+    currentDifficulty = Math.min(Math.floor(totalPoints / 100) + 1, 5);
+    const baseRange = Math.min(100 * currentDifficulty, 900);
+    
+    if (operator === '+') {
+        num1 = Math.floor(Math.random() * baseRange) + 1;
+        const maxNum2 = 1000 - num1;
+        num2 = Math.floor(Math.random() * Math.min(baseRange, maxNum2)) + 1;
+        correctAnswer = num1 + num2;
+    } else {
+        num1 = Math.floor(Math.random() * baseRange) + 100;
+        num2 = Math.floor(Math.random() * (num1 - 1)) + 1;
+        correctAnswer = num1 - num2;
+    }
+    
+    problemEl.textContent = `${num1} ${operator} ${num2} = ?`;
+    answerEl.value = '';
+    answerEl.className = 'answer';
+    answerEl.disabled = false;
+    resultEl.textContent = '';
+    answerEl.focus();
+    alreadyAnswered = false;
+    remainingAttempts = 3;
+    attemptsEl.textContent = remainingAttempts;
+    
+    if (!timerInterval) {
+        startTimer();
     }
 }
 
-function generateAdditionWithCarry() {
-    const container = document.getElementById('additionWithCarry');
-    container.innerHTML = '';
+// Kiểm tra đáp án
+function checkAnswer() {
+    if (alreadyAnswered) return;
     
-    for (let i = 0; i < 5; i++) {
-        let a, b;
-        // Đảm bảo có nhớ (tổng các chữ số >= 10)
-        do {
-            a = Math.floor(Math.random() * 50) + 30;
-            b = Math.floor(Math.random() * 50) + 30;
-        } while ((a % 10) + (b % 10) < 10 || a + b > 100);
-        
-        createProblem(container, a, '+', b);
+    const userAnswer = parseInt(answerEl.value);
+    
+    if (isNaN(userAnswer)) {
+        resultEl.textContent = 'Vui lòng nhập số!';
+        resultEl.className = 'result incorrect feedback';
+        return;
     }
-}
-
-function generateSubtractionNoBorrow() {
-    const container = document.getElementById('subtractionNoBorrow');
-    container.innerHTML = '';
     
-    for (let i = 0; i < 5; i++) {
-        let a, b;
-        // Đảm bảo không có nhớ (chữ số bị trừ >= chữ số trừ)
-        do {
-            a = Math.floor(Math.random() * 90) + 10;
-            b = Math.floor(Math.random() * (a - 1)) + 1;
-        } while ((a % 10) < (b % 10));
+    remainingAttempts--;
+    attemptsEl.textContent = remainingAttempts;
+    
+    if (userAnswer === correctAnswer) {
+        const pointsEarned = currentDifficulty * 10;
+        totalPoints += pointsEarned;
         
-        createProblem(container, a, '-', b);
-    }
-}
-
-function generateSubtractionWithBorrow() {
-    const container = document.getElementById('subtractionWithBorrow');
-    container.innerHTML = '';
-    
-    for (let i = 0; i < 5; i++) {
-        let a, b;
-        // Đảm bảo có nhớ (chữ số bị trừ < chữ số trừ)
-        do {
-            a = Math.floor(Math.random() * 90) + 10;
-            b = Math.floor(Math.random() * (a - 1)) + 1;
-        } while ((a % 10) >= (b % 10));
+        resultEl.innerHTML = `<span class="correct">Chính xác! +${pointsEarned} điểm</span>`;
+        resultEl.className = 'result correct feedback';
+        correctCount++;
+        correctEl.textContent = correctCount;
+        pointsEl.textContent = totalPoints;
         
-        createProblem(container, a, '-', b);
-    }
-}
-
-function createProblem(container, a, operator, b) {
-    const problemDiv = document.createElement('div');
-    problemDiv.className = 'exercise';
-    
-    const problemText = document.createElement('div');
-    problemText.className = 'problem';
-    problemText.innerHTML = `${a} ${operator} ${b} = `;
-    
-    const input = document.createElement('input');
-    input.type = 'number';
-    input.dataset.a = a;
-    input.dataset.operator = operator;
-    input.dataset.b = b;
-    input.dataset.correct = operator === '+' ? a + b : a - b;
-    
-    const feedback = document.createElement('span');
-    feedback.className = 'feedback';
-    
-    problemText.appendChild(input);
-    problemText.appendChild(feedback);
-    problemDiv.appendChild(problemText);
-    container.appendChild(problemDiv);
-}
-
-function checkAnswers() {
-    score = 0;
-    const inputs = document.querySelectorAll('input');
-    const feedbacks = document.querySelectorAll('.feedback');
-    
-    inputs.forEach((input, index) => {
-        const userAnswer = parseInt(input.value);
-        const correctAnswer = parseInt(input.dataset.correct);
-        const feedback = feedbacks[index];
+        alreadyAnswered = true;
+        answerEl.className = 'answer answered';
+        answerEl.disabled = true;
         
-        if (isNaN(userAnswer)) {
-            feedback.textContent = 'Chưa nhập đáp án';
-            feedback.className = 'feedback incorrect';
-            return;
-        }
-        
-        if (userAnswer === correctAnswer) {
-            score++;
-            feedback.textContent = 'Đúng!';
-            feedback.className = 'feedback correct';
+        // Tự động tạo bài toán mới
+        setTimeout(generateNewProblem, 1500);
+    } else {
+        if (remainingAttempts <= 0) {
+            resultEl.innerHTML = `<span class="incorrect">Sai rồi! Đáp án đúng là: ${correctAnswer}</span><br>
+                                <span>Đã hết lượt thử, chuyển câu mới...</span>`;
+            resultEl.className = 'result incorrect feedback';
+            incorrectCount++;
+            incorrectEl.textContent = incorrectCount;
+            
+            alreadyAnswered = true;
+            answerEl.className = 'answer answered';
+            answerEl.disabled = true;
+            
+            // Tự động chuyển câu mới sau 2 giây
+            setTimeout(generateNewProblem, 2000);
         } else {
-            feedback.textContent = `Sai! Đáp án đúng là ${correctAnswer}`;
-            feedback.className = 'feedback incorrect';
+            resultEl.innerHTML = `<span class="incorrect">Sai rồi! Thử lại nhé (còn ${remainingAttempts} lượt)</span>`;
+            resultEl.className = 'result incorrect feedback';
+            incorrectCount++;
+            incorrectEl.textContent = incorrectCount;
+            
+            answerEl.value = '';
+            answerEl.focus();
         }
-    });
-    
-    document.getElementById('totalScore').textContent = score;
+    }
 }
 
-function generateNewProblems() {
-    // Xóa tất cả phản hồi
-    document.querySelectorAll('.feedback').forEach(fb => {
-        fb.textContent = '';
-        fb.className = 'feedback';
-    });
-    
-    // Đặt lại điểm
-    document.getElementById('totalScore').textContent = '0';
-    
-    // Tạo bài tập mới
-    generateProblems();
-    
-    // Xóa tất cả giá trị nhập
-    document.querySelectorAll('input').forEach(input => {
-        input.value = '';
-    });
-}
+// Sự kiện click nút
+newProblemBtn.addEventListener('click', generateNewProblem);
+
+// Sự kiện nhấn Enter
+answerEl.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        checkAnswer();
+    }
+});
+
+// Tạo bài toán đầu tiên khi trang load
+generateNewProblem();
