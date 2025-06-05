@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Chatbot</title>
+    <link rel="stylesheet" href="feature10.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            Ultimate Chatbot
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot-message">
+                <div>Hi! I'm your ultimate assistant. I can:</div>
+                <ul>
+                    <li>Solve math problems</li>
+                    <li>Help with tech issues</li>
+                    <li>Recommend books/movies</li>
+                    <li>Tell jokes and facts</li>
+                </ul>
+                <div class="suggestions">
+                    <div class="suggestion" onclick="quickQuestion('Calculate 15 + 27')">Math</div>
+                    <div class="suggestion" onclick="quickQuestion('Tech help')">Tech</div>
+                    <div class="suggestion" onclick="quickQuestion('Tell me a joke')">Joke</div>
+                </div>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type your message here...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+    <script src="feature10.js"></script>
+</body>
+</html>
