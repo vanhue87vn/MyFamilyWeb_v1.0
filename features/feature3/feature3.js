@@ -7,24 +7,25 @@
         // Cấu hình game
         const config = {
             botCount: 455,
-            initialBallSize: 20,
-            sizePerBot: 0.5,
-            minBotSize: 5,
-            maxBotSize: 15,
+            initialPlayerSize: 30,
+            sizePerBot: 1,
+            minBotSize: 10,
+            maxBotSize: 25,
             minBotSpeed: 1,
-            maxBotSpeed: 3
+            maxBotSpeed: 3,
+            playerSpeed: 5
         };
 
-        // Bóng của người chơi (giờ là hình vuông)
-        const square = {
+        // Nhân vật hình vuông của người chơi
+        const player = {
             x: canvas.width / 2,
             y: canvas.height / 2,
-            size: config.initialBallSize * 2, // size là chiều dài cạnh
-            color: '#FF0000',
+            size: config.initialPlayerSize,
+            color: '#00FF00',
             score: 0
         };
 
-        // Tạo 455 bot (vẫn giữ hình tròn)
+        // Tạo 455 bot hình tròn
         const bots = [];
         for (let i = 0; i < config.botCount; i++) {
             bots.push(createBot());
@@ -42,41 +43,30 @@
             };
         }
 
-        // Theo dõi vị trí chuột/chạm
-        let targetX = square.x;
-        let targetY = square.y;
-
-        canvas.addEventListener('mousemove', (e) => {
-            targetX = e.clientX;
-            targetY = e.clientY;
+        // Điều khiển
+        const keys = {};
+        window.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+        });
+        window.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
         });
 
-        canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            targetX = e.touches[0].clientX;
-            targetY = e.touches[0].clientY;
-        }, { passive: false });
-
-        // Vẽ hình vuông thay vì bóng
-        function drawSquare() {
-            ctx.beginPath();
-            ctx.rect(square.x - square.size/2, square.y - square.size/2, square.size, square.size);
-            
-            // Gradient cho hình vuông
-            const gradient = ctx.createLinearGradient(
-                square.x - square.size/2, square.y - square.size/2,
-                square.x + square.size/2, square.y + square.size/2
+        // Vẽ nhân vật hình vuông
+        function drawPlayer() {
+            ctx.fillStyle = player.color;
+            ctx.shadowColor = player.color;
+            ctx.shadowBlur = 15;
+            ctx.fillRect(
+                player.x - player.size/2, 
+                player.y - player.size/2, 
+                player.size, 
+                player.size
             );
-            gradient.addColorStop(0, 'white');
-            gradient.addColorStop(0.5, square.color);
-            gradient.addColorStop(1, 'darkred');
-            
-            ctx.fillStyle = gradient;
-            ctx.fill();
-            ctx.closePath();
+            ctx.shadowBlur = 0;
         }
 
-        // Vẽ bot (giữ nguyên hình tròn)
+        // Vẽ bot hình tròn
         function drawBot(bot) {
             ctx.beginPath();
             ctx.arc(bot.x, bot.y, bot.radius, 0, Math.PI * 2);
@@ -98,24 +88,16 @@
             return (distanceX * distanceX + distanceY * distanceY) < (circleRadius * circleRadius);
         }
 
-        // Di chuyển hình vuông theo chuột
-        function moveSquare() {
-            const dx = targetX - square.x;
-            const dy = targetY - square.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            
-            // Tốc độ di chuyển phụ thuộc vào kích thước
-            const speed = Math.max(5 - square.size / 40, 1);
-            
-            if (distance > 5) {
-                square.x += dx / distance * speed;
-                square.y += dy / distance * speed;
-            }
+        // Di chuyển nhân vật
+        function movePlayer() {
+            if (keys['ArrowUp'] || keys['w']) player.y -= config.playerSpeed;
+            if (keys['ArrowDown'] || keys['s']) player.y += config.playerSpeed;
+            if (keys['ArrowLeft'] || keys['a']) player.x -= config.playerSpeed;
+            if (keys['ArrowRight'] || keys['d']) player.x += config.playerSpeed;
             
             // Giới hạn trong màn hình
-            const halfSize = square.size/2;
-            square.x = Math.max(halfSize, Math.min(canvas.width - halfSize, square.x));
-            square.y = Math.max(halfSize, Math.min(canvas.height - halfSize, square.y));
+            player.x = Math.max(player.size/2, Math.min(canvas.width - player.size/2, player.x));
+            player.y = Math.max(player.size/2, Math.min(canvas.height - player.size/2, player.y));
         }
 
         // Di chuyển bot
@@ -135,15 +117,17 @@
                     bot.y = Math.max(bot.radius, Math.min(canvas.height - bot.radius, bot.y));
                 }
                 
-                // Tránh hình vuông của người chơi
-                const distX = square.x - bot.x;
-                const distY = square.y - bot.y;
-                const distance = Math.sqrt(distX * distX + distY * distY);
-                
-                if (distance < square.size) {
-                    const angle = Math.atan2(distY, distX);
-                    bot.dx = -Math.cos(angle) * bot.dx;
-                    bot.dy = -Math.sin(angle) * bot.dy;
+                // Tránh nhân vật nếu nhỏ hơn
+                if (bot.radius < player.size/2) {
+                    const distX = player.x - bot.x;
+                    const distY = player.y - bot.y;
+                    const distance = Math.sqrt(distX * distX + distY * distY);
+                    
+                    if (distance < player.size) {
+                        const angle = Math.atan2(distY, distX);
+                        bot.dx = -Math.cos(angle) * bot.dx;
+                        bot.dy = -Math.sin(angle) * bot.dy;
+                    }
                 }
             });
         }
@@ -152,19 +136,19 @@
         function checkEatBots() {
             for (let i = bots.length - 1; i >= 0; i--) {
                 const bot = bots[i];
-                if (checkCollision(square.x, square.y, square.size, bot.x, bot.y, bot.radius)) {
-                    // Chỉ ăn được bot nhỏ hơn (so sánh đường chéo hình vuông với đường kính hình tròn)
-                    if (bot.radius * 2 < square.size * Math.sqrt(2)) {
-                        // Tăng kích thước hình vuông
-                        square.size += config.sizePerBot * 2;
-                        square.score++;
+                if (checkCollision(player.x, player.y, player.size, bot.x, bot.y, bot.radius)) {
+                    // Chỉ ăn được bot nhỏ hơn
+                    if (bot.radius < player.size/2) {
+                        // Tăng kích thước nhân vật
+                        player.size += config.sizePerBot;
+                        player.score++;
                         
                         // Xóa bot
                         bots.splice(i, 1);
                         
                         // Cập nhật UI
                         document.getElementById('botCount').textContent = bots.length;
-                        document.getElementById('size').textContent = Math.floor(square.size/2);
+                        document.getElementById('size').textContent = Math.floor(player.size);
                     }
                 }
             }
@@ -181,7 +165,7 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             // Di chuyển
-            moveSquare();
+            movePlayer();
             moveBots();
             
             // Kiểm tra va chạm
@@ -189,7 +173,7 @@
             
             // Vẽ
             bots.forEach(drawBot);
-            drawSquare();
+            drawPlayer();
             
             // Lặp lại
             requestAnimationFrame(gameLoop);
