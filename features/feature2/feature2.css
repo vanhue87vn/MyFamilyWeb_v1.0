@@ -1,60 +1,99 @@
-        body {
-            margin: 0;
-            text-align: center;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-        }
+body {
+    margin: 0;
+    text-align: center;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
 
-        canvas {
-            background: #000;
-            display: block;
-            margin: 20px auto;
-            border: 2px solid #333;
-        }
+canvas {
+    background: #000;
+    display: block;
+    margin: 20px auto;
+    border: 2px solid #333;
+}
 
-        h2 {
-            color: green;
-            margin-top: 20px;
-        }
+h2 {
+    color: green;
+    margin-top: 20px;
+}
 
-        .score {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 10px;
-        }
+.score {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 10px;
+}
 
-        #gameOver {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            display: none;
-            z-index: 100;
-            text-align: center;
-            width: 300px;
-        }
+/* Mobile First Styles */
+#game {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    touch-action: none;
+}
 
-        #gameOver h3 {
-            color: red;
-            font-size: 30px;
-            margin-top: 0;
-        }
+#mobile-controls {
+    display: none;
+    /* Sẽ được hiển thị bởi JS khi cần */
+}
 
-        #gameOver button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 15px;
-        }
+/* Hiển thị trên mobile */
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
 
-        #gameOver button:hover {
-            background-color: #45a049;
-        }
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .score {
+        font-size: 1.2rem;
+    }
+
+    #gameOver {
+        width: 90%;
+        left: 5%;
+    }
+}
+
+/* Ngăn zoom trên mobile */
+html {
+    touch-action: manipulation;
+}
+
+#gameOver {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    display: none;
+    z-index: 100;
+    text-align: center;
+    width: 300px;
+}
+
+#gameOver h3 {
+    color: red;
+    font-size: 30px;
+    margin-top: 0;
+}
+
+#gameOver button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+#gameOver button:hover {
+    background-color: #45a049;
+}
