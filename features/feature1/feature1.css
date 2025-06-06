@@ -33,7 +33,8 @@
 }
 
 .hiragana-char {
-    font-size: 64px;
+    /*font-size: 64px;*/
+    font-size: clamp(18px, 3vw, 64px);
     font-weight: bold;
 }
 
