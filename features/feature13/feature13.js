@@ -258,3 +258,17 @@
 
         // Start the game when page loads
         window.addEventListener('load', init);
+
+        // Add confetti effect on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            createConfetti();
+        });
+                // JavaScript code for the game logic will go here
+        // This is a placeholder for the actual game implementation
+        document.getElementById('statement').textContent = "This is a sample statement for the game.";
+        document.getElementById('total-questions').textContent = "10"; // Example total questions
+        document.getElementById('next-btn').style.display = 'block'; // Show next button for demonstration
+        document.getElementById('restart-btn').style.display = 'block'; // Show restart button for demonstration
+        document.getElementById('next-btn').addEventListener('click', function() {
+            alert('Next question logic goes here!');
+        });
