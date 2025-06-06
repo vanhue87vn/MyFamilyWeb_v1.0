@@ -1,236 +1,260 @@
-        // Enhanced game data with categories and explanations
+        // Game data with categories
         const gameData = {
-            general: [
-                { 
-                    statement: "Honey never spoils. Archaeologists have found edible honey in ancient Egyptian tombs.", 
-                    answer: "fact",
-                    explanation: "Honey's low moisture content and acidic pH make it inhospitable to bacteria. Archaeologists have indeed found 3,000-year-old honey that's still edible!"
-                },
-                { 
-                    statement: "The Great Wall of China is the only man-made structure visible from space.", 
-                    answer: "fiction",
-                    explanation: "This is a common myth. Many large human-made structures are visible from low Earth orbit, but the Great Wall isn't particularly visible to the naked eye."
-                }
-            ],
             science: [
-                { 
-                    statement: "Bananas are berries, but strawberries aren't.", 
-                    answer: "fact",
-                    explanation: "Botanically, berries develop from a single ovary and typically contain multiple seeds. Bananas qualify, while strawberries develop from multiple ovaries."
-                },
-                { 
-                    statement: "The human body has five senses.", 
-                    answer: "fiction",
-                    explanation: "Humans have at least 9 senses, including balance (equilibrioception), temperature (thermoception), and pain (nociception)."
-                }
+                { statement: "A human could swim through the blood vessels of a blue whale.", answer: "fact", explanation: "A blue whale's aorta is so large that a small human could theoretically swim through it." },
+                { statement: "The smell of rain is called petrichor.", answer: "fact", explanation: "Petrichor is the earthy scent produced when rain falls on dry soil." },
+                { statement: "Humans only use 10% of their brains.", answer: "fiction", explanation: "This is a myth - brain scans show activity throughout the entire brain." },
+                { statement: "Lightning never strikes the same place twice.", answer: "fiction", explanation: "Lightning often strikes tall structures repeatedly." },
+                { statement: "Bananas are berries, but strawberries aren't.", answer: "fact", explanation: "Botanically, bananas qualify as berries while strawberries don't meet the criteria." }
             ],
             history: [
-                { 
-                    statement: "Cleopatra lived closer to the invention of the iPhone than to the building of the pyramids.", 
-                    answer: "fact",
-                    explanation: "The pyramids were built around 2560 BCE, Cleopatra lived around 30 BCE (2,530 years later), and the iPhone debuted in 2007 (2,037 years after Cleopatra)."
-                },
-                { 
-                    statement: "The Titanic was the deadliest ship disaster in history.", 
-                    answer: "fiction",
-                    explanation: "While tragic (1,500+ deaths), the Wilhelm Gustloff sinking in 1945 killed about 9,400 people, making it the deadliest maritime disaster."
-                }
+                { statement: "The Great Wall of China is visible from space.", answer: "fiction", explanation: "It's not visible to the naked eye from space despite the common myth." },
+                { statement: "Napoleon Bonaparte was unusually short.", answer: "fiction", explanation: "At 5'7\", he was actually average height for his time." },
+                { statement: "The Titanic was advertised as 'unsinkable'.", answer: "fiction", explanation: "While considered very safe, it was never officially called unsinkable." },
+                { statement: "Ancient Romans used urine as mouthwash.", answer: "fact", explanation: "The ammonia in urine acted as a cleaning agent." },
+                { statement: "The Hundred Years' War lasted exactly 100 years.", answer: "fiction", explanation: "It actually lasted 116 years (1337-1453)." }
             ],
-            animals: [
-                { 
-                    statement: "A group of flamingos is called a 'flamboyance'.", 
-                    answer: "fact",
-                    explanation: "This colorful term fits these vibrant birds perfectly! Other great animal group names include a 'murder' of crows and a 'parliament' of owls."
-                },
-                { 
-                    statement: "Bats are blind.", 
-                    answer: "fiction",
-                    explanation: "While bats use echolocation to navigate, they can see quite well. In fact, many species have excellent night vision."
-                }
+            nature: [
+                { statement: "A group of crows is called a murder.", answer: "fact", explanation: "This poetic term dates back to 15th century English folklore." },
+                { statement: "Bulls are angered by the color red.", answer: "fiction", explanation: "Bulls are colorblind to red - they react to movement." },
+                { statement: "Polar bears have black skin under their fur.", answer: "fact", explanation: "The black skin helps absorb heat from sunlight." },
+                { statement: "Camels store water in their humps.", answer: "fiction", explanation: "They store fat in humps; water is stored throughout their bodies." },
+                { statement: "Octopuses have three hearts.", answer: "fact", explanation: "Two pump blood to the gills, one to the rest of the body." }
             ],
-            geography: [
-                { 
-                    statement: "The Eiffel Tower grows taller in the summer due to heat expansion.", 
-                    answer: "fact",
-                    explanation: "Iron expands when heated! The tower can grow up to 6 inches (15 cm) taller on hot days."
-                },
-                { 
-                    statement: "Canada is the largest country in the world by land area.", 
-                    answer: "fiction",
-                    explanation: "Russia is the largest (17.1 million km²), followed by Canada (9.98 million km²). Canada is larger than China and the US though!"
-                }
+            tech: [
+                { statement: "The first computer programmer was a woman.", answer: "fact", explanation: "Ada Lovelace wrote algorithms for Charles Babbage's Analytical Engine." },
+                { statement: "The 'Q' in QWERTY stands for 'Quick'.", answer: "fiction", explanation: "It's just the name of the keyboard layout's first letters." },
+                { statement: "The first website is still online.", answer: "fact", explanation: "Tim Berners-Lee's 1991 website at info.cern.ch is still accessible." },
+                { statement: "Smartphones have more computing power than NASA had for the moon landing.", answer: "fact", explanation: "Modern phones are millions of times more powerful." },
+                { statement: "The inventor of WiFi was inspired by chocolate.", answer: "fact", explanation: "The idea for frequency hopping came from chocolate melting issues." }
             ]
         };
 
-        // Game variables
-        let currentQuestions = [];
-        let currentFactIndex = 0;
-        let score = 0;
-        let gameActive = true;
-        let selectedCategory = 'all';
+        // Game state
+        const state = {
+            questions: [],
+            currentIndex: 0,
+            score: 0,
+            gameActive: false,
+            selectedCategory: 'all',
+            answered: false
+        };
 
         // DOM elements
-        const factDisplay = document.getElementById('fact-display');
-        const factBtn = document.getElementById('fact-btn');
-        const fictionBtn = document.getElementById('fiction-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const scoreDisplay = document.getElementById('score');
-        const feedbackDisplay = document.getElementById('feedback');
-        const explanationDisplay = document.getElementById('explanation');
-        const questionCountDisplay = document.getElementById('question-count');
-        const totalQuestionsDisplay = document.getElementById('total-questions');
-        const progressBar = document.getElementById('progress-bar');
-        const categorySelector = document.createElement('select');
-        
-        // Initialize the game
-        function initGame() {
-            // Create category selector
-            categorySelector.id = 'category-select';
-            categorySelector.innerHTML = `
-                <option value="all">All Categories</option>
-                <option value="general">General Knowledge</option>
-                <option value="science">Science</option>
-                <option value="history">History</option>
-                <option value="animals">Animals</option>
-                <option value="geography">Geography</option>
-            `;
-            categorySelector.addEventListener('change', (e) => {
-                selectedCategory = e.target.value;
-                startGame();
-            });
+        const elements = {
+            statement: document.getElementById('statement'),
+            factBtn: document.getElementById('fact-btn'),
+            fictionBtn: document.getElementById('fiction-btn'),
+            nextBtn: document.getElementById('next-btn'),
+            restartBtn: document.getElementById('restart-btn'),
+            score: document.getElementById('score'),
+            feedback: document.getElementById('feedback'),
+            explanation: document.getElementById('explanation'),
+            questionCount: document.getElementById('question-count'),
+            totalQuestions: document.getElementById('total-questions'),
+            progressBar: document.getElementById('progress-bar'),
+            categorySelect: document.getElementById('category-select')
+        };
+
+        // Initialize game
+        function init() {
+            // Event listeners
+            elements.factBtn.addEventListener('click', () => checkAnswer('fact'));
+            elements.fictionBtn.addEventListener('click', () => checkAnswer('fiction'));
+            elements.nextBtn.addEventListener('click', nextQuestion);
+            elements.restartBtn.addEventListener('click', startGame);
+            elements.categorySelect.addEventListener('change', changeCategory);
             
-            const container = document.querySelector('.container');
-            container.insertBefore(categorySelector, factDisplay);
-            
+            // Start the game
             startGame();
         }
-        
+
+        // Start a new game
         function startGame() {
-            // Reset game state
-            currentFactIndex = 0;
-            score = 0;
-            gameActive = true;
-            scoreDisplay.textContent = score;
+            // Reset state
+            state.currentIndex = 0;
+            state.score = 0;
+            state.gameActive = true;
+            state.answered = false;
             
-            // Get questions based on category
-            if (selectedCategory === 'all') {
-                currentQuestions = Object.values(gameData).flat();
+            // Load questions
+            loadQuestions();
+            
+            // Update UI
+            updateScore();
+            elements.questionCount.textContent = 1;
+            elements.totalQuestions.textContent = state.questions.length;
+            elements.progressBar.style.width = '0%';
+            elements.feedback.textContent = '';
+            elements.explanation.textContent = '';
+            elements.explanation.style.display = 'none';
+            elements.factBtn.disabled = false;
+            elements.fictionBtn.disabled = false;
+            elements.nextBtn.style.display = 'none';
+            elements.restartBtn.style.display = 'none';
+            elements.factBtn.style.display = 'block';
+            elements.fictionBtn.style.display = 'block';
+            
+            // Show first question
+            showQuestion();
+        }
+
+        // Load questions based on selected category
+        function loadQuestions() {
+            if (state.selectedCategory === 'all') {
+                // Combine all questions
+                state.questions = Object.values(gameData).flat();
             } else {
-                currentQuestions = [...gameData[selectedCategory]];
+                // Get questions for selected category
+                state.questions = [...gameData[state.selectedCategory]];
             }
             
             // Shuffle questions
-            currentQuestions = shuffleArray(currentQuestions);
-            totalQuestionsDisplay.textContent = currentQuestions.length;
-            
-            loadFact();
+            shuffleArray(state.questions);
         }
-        
+
+        // Shuffle array using Fisher-Yates algorithm
         function shuffleArray(array) {
-            const newArray = [...array];
-            for (let i = newArray.length - 1; i > 0; i--) {
+            for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+                [array[i], array[j]] = [array[j], array[i]];
             }
-            return newArray;
+            return array;
         }
-        
-        function loadFact() {
-            if (currentFactIndex >= currentQuestions.length) {
+
+        // Show current question
+        function showQuestion() {
+            if (!state.gameActive || state.currentIndex >= state.questions.length) {
                 endGame();
                 return;
             }
             
-            questionCountDisplay.textContent = currentFactIndex + 1;
-            progressBar.style.width = `${((currentFactIndex + 1) / currentQuestions.length) * 100}%`;
+            const question = state.questions[state.currentIndex];
+            elements.statement.textContent = question.statement;
             
-            factDisplay.textContent = currentQuestions[currentFactIndex].statement;
-            feedbackDisplay.textContent = '';
-            feedbackDisplay.className = 'feedback';
-            explanationDisplay.textContent = '';
-            explanationDisplay.className = 'explanation';
-            nextBtn.style.display = 'none';
-            factBtn.style.display = 'block';
-            fictionBtn.style.display = 'block';
-            factBtn.disabled = false;
-            fictionBtn.disabled = false;
+            // Update progress
+            elements.questionCount.textContent = state.currentIndex + 1;
+            elements.progressBar.style.width = `${((state.currentIndex + 1) / state.questions.length) * 100}%`;
+            
+            // Reset UI for new question
+            elements.feedback.textContent = '';
+            elements.explanation.textContent = '';
+            elements.explanation.style.display = 'none';
+            elements.nextBtn.style.display = 'none';
+            elements.factBtn.disabled = false;
+            elements.fictionBtn.disabled = false;
+            state.answered = false;
         }
-        
+
+        // Check if answer is correct
         function checkAnswer(guess) {
-            if (!gameActive) return;
+            if (!state.gameActive || state.answered) return;
             
-            const correctAnswer = currentQuestions[currentFactIndex].answer;
-            factBtn.disabled = true;
-            fictionBtn.disabled = true;
-            nextBtn.style.display = 'block';
+            state.answered = true;
+            const question = state.questions[state.currentIndex];
+            const isCorrect = guess === question.answer;
             
-            // Show explanation
-            explanationDisplay.textContent = currentQuestions[currentFactIndex].explanation;
-            explanationDisplay.classList.add('show-explanation');
-            
-            if (guess === correctAnswer) {
-                score++;
-                scoreDisplay.textContent = score;
-                feedbackDisplay.textContent = "Correct! 🎉";
-                feedbackDisplay.className = 'feedback correct';
+            // Update score
+            if (isCorrect) {
+                state.score++;
+                updateScore();
+                elements.feedback.textContent = 'Correct! 🎉';
+                elements.feedback.className = 'feedback correct';
                 createConfetti();
             } else {
-                feedbackDisplay.textContent = `Wrong! It's ${correctAnswer === 'fact' ? 'a FACT' : 'FICTION'}.`;
-                feedbackDisplay.className = 'feedback incorrect';
+                elements.feedback.textContent = `Incorrect! It's ${question.answer === 'fact' ? 'a FACT' : 'FICTION'}.`;
+                elements.feedback.className = 'feedback incorrect';
+            }
+            
+            // Show explanation
+            elements.explanation.textContent = question.explanation;
+            elements.explanation.style.display = 'block';
+            
+            // Disable answer buttons
+            elements.factBtn.disabled = true;
+            elements.fictionBtn.disabled = true;
+            
+            // Show next button
+            elements.nextBtn.style.display = 'block';
+        }
+
+        // Move to next question
+        function nextQuestion() {
+            state.currentIndex++;
+            if (state.currentIndex < state.questions.length) {
+                showQuestion();
+            } else {
+                endGame();
             }
         }
-        
+
+        // End the game
         function endGame() {
-            factDisplay.innerHTML = `Game Over!<br>Your final score: ${score}/${currentQuestions.length}`;
-            feedbackDisplay.textContent = '';
-            explanationDisplay.textContent = '';
-            nextBtn.style.display = 'none';
-            factBtn.style.display = 'none';
-            fictionBtn.style.display = 'none';
-            gameActive = false;
+            state.gameActive = false;
             
-            if (score === currentQuestions.length) {
+            // Show final score
+            elements.statement.innerHTML = `
+                <div class="game-over">Game Over!</div>
+                <div class="final-score">${state.score}/${state.questions.length}</div>
+            `;
+            
+            // Hide answer buttons
+            elements.factBtn.style.display = 'none';
+            elements.fictionBtn.style.display = 'none';
+            elements.nextBtn.style.display = 'none';
+            
+            // Show restart button
+            elements.restartBtn.style.display = 'block';
+            
+            // Special message for perfect score
+            if (state.score === state.questions.length) {
+                elements.statement.innerHTML += `<div style="margin-top: 1rem;">Perfect! You're a fact master! 🏆</div>`;
                 createConfetti(true);
             }
         }
-        
+
+        // Update score display
+        function updateScore() {
+            elements.score.textContent = state.score;
+        }
+
+        // Change category
+        function changeCategory(e) {
+            state.selectedCategory = e.target.value;
+            startGame();
+        }
+
+        // Create confetti effect
         function createConfetti(intense = false) {
-            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
-            const container = document.querySelector('.container');
+            const colors = ['#4cc9f0', '#f72585', '#b5179e', '#7209b7', '#560bad', '#480ca8'];
+            const container = document.querySelector('.game-container');
             
-            const confettiCount = intense ? 100 : 20;
+            const count = intense ? 100 : 30;
             
-            for (let i = 0; i < confettiCount; i++) {
+            for (let i = 0; i < count; i++) {
                 const confetti = document.createElement('div');
-                confetti.className = 'confetti';
+                confetti.style.position = 'absolute';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = '50%';
                 confetti.style.left = `${Math.random() * 100}%`;
                 confetti.style.top = '-10px';
+                confetti.style.zIndex = '100';
+                confetti.style.pointerEvents = 'none';
                 container.appendChild(confetti);
                 
-                const animationDuration = Math.random() * 3 + 2;
-                
-                confetti.animate([
-                    { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+                const animation = confetti.animate([
+                    { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
                     { transform: `translate(${Math.random() * 200 - 100}px, ${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
                 ], {
-                    duration: animationDuration * 1000,
+                    duration: Math.random() * 3000 + 2000,
                     easing: 'cubic-bezier(0.1, 0.8, 0.9, 1)'
                 });
                 
-                setTimeout(() => {
-                    confetti.remove();
-                }, animationDuration * 1000);
+                animation.onfinish = () => confetti.remove();
             }
         }
-        
-        // Event listeners
-        factBtn.addEventListener('click', () => checkAnswer('fact'));
-        fictionBtn.addEventListener('click', () => checkAnswer('fiction'));
-        nextBtn.addEventListener('click', () => {
-            currentFactIndex++;
-            loadFact();
-        });
-        
+
         // Start the game when page loads
-        window.addEventListener('load', initGame);
+        window.addEventListener('load', init);
