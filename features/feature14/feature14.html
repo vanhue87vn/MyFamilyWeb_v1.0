@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enchanted Shooter</title>
+    <link rel="stylesheet" href="feature14.css">
+</head>
+<body>
+    <div id="uiContainer">
+        <div id="scoreDisplay">Score: 0</div>
+        <div id="manaDisplay">Mana: 100%</div>
+    </div>
+    <div id="startScreen">
+        <h1>Enchanted Shooter</h1>
+        <div class="instructions">
+            <p>Use arrow keys to move</p>
+            <p>Hold SPACE to charge your spell</p>
+            <p>Release SPACE to cast</p>
+            <p>Avoid the dark creatures!</p>
+        </div>
+        <button id="startButton">Begin Adventure</button>
+    </div>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div id="gameOverScreen">
+        <h2>Game Over</h2>
+        <p>Your final score: <span id="finalScore">0</span></p>
+        <button id="restartButton">Restart</button>
+    </div>
+    <script src="feature14.js"></script>
+    <script src="../../js/utils/helpers.js"></script>
+</body>
+</html>
