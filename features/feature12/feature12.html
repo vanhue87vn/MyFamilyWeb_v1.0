@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiragana Random Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .main-panel {
+            display: flex;
+            width: 100%;
+            max-width: 1000px;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .character-box {
+            flex: 2;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            margin-right: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #main-character {
+            font-size: 250px;
+            color: #2c3e50;
+            line-height: 1;
+        }
+
+        .timer-box {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #timer {
+            font-size: 60px;
+            color: #666;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+
+        .controls {
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            transition: all 0.3s;
+            margin: 0 10px;
+        }
+
+        .generate-btn {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .generate-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .reset-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .history-panel {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .history-item {
+            position: relative;
+            font-size: 40px;
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #eee;
+        }
+
+        .count-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #e74c3c;
+            color: white;
+            font-size: 14px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-panel">
+        <div class="character-box">
+            <div id="main-character">?</div>
+        </div>
+        <div class="timer-box">
+            <div id="timer">00:00:00</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="generate-btn" onclick="generateNewCharacter()">Generate</button>
+        <button class="reset-btn" onclick="resetAll()">Reset</button>
+    </div>
+
+    <div class="history-panel">
+        <h2>Lịch sử xuất hiện</h2>
+        <div class="history-grid" id="historyContainer"></div>
+    </div>
+
+    <script>
+        let charHistory = [];
+        let charStatistics = {};
+        let timerRunning = false;
+        let startTimestamp = 0;
+        let currentTimer = 0;
+
+        const hiraganaRanges = [
+            { start: 0x3041, end: 0x3096 } // Hiragana
+        ];
+
+        function getRandomHiragana() {
+            const range = hiraganaRanges[Math.floor(Math.random() * hiraganaRanges.length)];
+            return String.fromCharCode(
+                Math.floor(Math.random() * (range.end - range.start + 1)) + range.start
+            );
+        }
+
+        function updateDisplay() {
+            // Cập nhật lịch sử
+            const historyHTML = charHistory.map(char => `
+                <div class="history-item">
+                    ${char}
+                    <div class="count-badge">${charStatistics[char]}</div>
+                </div>
+            `).join('');
+            document.getElementById('historyContainer').innerHTML = historyHTML;
+        }
+
+        function generateNewCharacter() {
+            // Bắt đầu đồng hồ
+            if (!timerRunning) {
+                timerRunning = true;
+                startTimestamp = Date.now() - currentTimer;
+                requestAnimationFrame(updateTimer);
+            }
+
+            // Tạo ký tự mới
+            const newChar = getRandomHiragana();
+            
+            // Cập nhật thống kê
+            charStatistics[newChar] = (charStatistics[newChar] || 0) + 1;
+            charHistory.unshift(newChar);
+
+            // Hiển thị
+            document.getElementById('main-character').textContent = newChar;
+            updateDisplay();
+        }
+
+        function updateTimer() {
+            if (timerRunning) {
+                currentTimer = Date.now() - startTimestamp;
+                const totalSeconds = Math.floor(currentTimer / 1000);
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+                
+                document.getElementById('timer').textContent = 
+                    `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+                
+                requestAnimationFrame(updateTimer);
+            }
+        }
+
+        function resetAll() {
+            timerRunning = false;
+            currentTimer = 0;
+            charHistory = [];
+            charStatistics = {};
+            document.getElementById('main-character').textContent = '?';
+            document.getElementById('timer').textContent = '00:00:00';
+            updateDisplay();
+        }
+
+        function pad(num) {
+            return num.toString().padStart(2, '0');
+        }
+    </script>
+</body>
+</html>
