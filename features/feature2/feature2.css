@@ -1,24 +1,28 @@
-        body { 
-            margin: 0; 
-            text-align: center; 
+        body {
+            margin: 0;
+            text-align: center;
             background-color: #f0f0f0;
             font-family: Arial, sans-serif;
         }
-        canvas { 
-            background: #000; 
-            display: block; 
-            margin: 20px auto; 
+
+        canvas {
+            background: #000;
+            display: block;
+            margin: 20px auto;
             border: 2px solid #333;
         }
+
         h2 {
             color: green;
             margin-top: 20px;
         }
+
         .score {
             font-size: 24px;
             font-weight: bold;
             margin: 10px;
         }
+
         #gameOver {
             position: absolute;
             top: 50%;
@@ -33,11 +37,13 @@
             text-align: center;
             width: 300px;
         }
+
         #gameOver h3 {
             color: red;
             font-size: 30px;
             margin-top: 0;
         }
+
         #gameOver button {
             background-color: #4CAF50;
             color: white;
@@ -48,6 +54,7 @@
             border-radius: 5px;
             margin-top: 15px;
         }
+
         #gameOver button:hover {
             background-color: #45a049;
         }
