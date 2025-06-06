@@ -54,10 +54,13 @@ body {
 
 /* Thêm rule mới để điều khiển thẻ h3 bên trong category-card */
 .category-card h3 {
-    font-size: 36px; /* Cỡ chữ bạn muốn */
+    /*font-size: 36px; /* Cỡ chữ bạn muốn */
+    font-size: clamp(24px, 3vw, 48px);
     margin-bottom: 5px; /* Có thể thêm để căn khoảng cách */
     color: #333; /* Màu chữ */
+    
 }
+
 
 .category-card:hover {
     transform: translateY(-5px);
