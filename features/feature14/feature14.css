@@ -1,0 +1,86 @@
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: radial-gradient(circle, #0a0e24, #000000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            user-select: none;
+        }
+        #gameCanvas {
+            border: 3px solid #5d3fd3;
+            border-radius: 5px;
+            box-shadow: 0 0 30px #5d3fd3;
+            background-color: #000033;
+        }
+        #uiContainer {
+            position: absolute;
+            width: 600px;
+            pointer-events: none;
+        }
+        #scoreDisplay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            text-shadow: 0 0 10px #00ffff;
+        }
+        #manaDisplay {
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            font-size: 24px;
+            text-shadow: 0 0 10px #5d3fd3;
+        }
+        #startScreen {
+            position: absolute;
+            text-align: center;
+            background: rgba(0, 0, 50, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #5d3fd3;
+            box-shadow: 0 0 30px #5d3fd3;
+        }
+        #startButton {
+            margin-top: 20px;
+            padding: 12px 30px;
+            font-size: 20px;
+            background: linear-gradient(to bottom, #5d3fd3, #3b228a);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px #5d3fd3;
+        }
+        #startButton:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px #5d3fd3;
+        }
+        h1 {
+            color: #5d3fd3;
+            text-shadow: 0 0 15px #5d3fd3;
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+        .instructions {
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        .power-up {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
