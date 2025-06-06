@@ -208,7 +208,7 @@ function gameLoop() {
         
         // Increase speed
         if (score % 5 === 0 && gameSpeed > 100) {
-            gameSpeed -= 20;
+            gameSpeed -= 10;
             clearInterval(gameInterval);
             gameInterval = setInterval(gameLoop, gameSpeed);
         }
