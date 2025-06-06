@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Family Web</title>
-    
+
     <!-- Liên kết file CSS chính -->
     <link rel="stylesheet" href="./css/main.css">
-    
+
     <!-- Liên kết font awesome (nếu muốn sử dụng icon) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <!-- Liên kết file JavaScript chính (để cuối body) -->
 </head>
+
 <body>
     <!-- Phần Header -->
     <header class="site-header">
         <div class="container">
             <div class="logo">
                 <h1><a href="index.html"> Hue An's Family Website </a></h1>
-                <p>Học tập cùng gia đình chúng tôi nhé</p>
+                <img src="../../data/icons/HueAn-Family-logo.png" alt="Logo" class="logo">
+                <!-- <p>Hãy vào không gian trải nghiệm của gia đình chúng tôi</p> -->
             </div>
-            
+
             <nav class="main-nav">
                 <ul>
                     <li><a href="index.html">Trang chủ</a></li>
                     <li><a href="./features/feature1/feature1.html">Bảng chữ cái Hiragana</a></li>
-                    <li><a href="./features/feature2/feature2.html">GAME: Rắn săn mồi</a></li>
-                    <li><a href="./features/feature3/feature3.html">GAME: Game Hình Vuông Ăn Bot</a></li>
-                    <li><a href="./features/feature4/feature4.html">GAME: Bóng đá</a></li>
+                    <!-- <li><a href="./features/feature2/feature2.html">GAME: Rắn săn mồi</a></li> -->
+                    <!-- <li><a href="./features/feature3/feature3.html">GAME: Game Hình Vuông Ăn Bot</a></li> -->
+                    <!-- <li><a href="./features/feature4/feature4.html">GAME: Bóng đá</a></li> -->
                     <li><a href="./features/feature5/feature5.html">GAME: Hiragana ball</a></li>
                     <li><a href="./features/feature6/feature6.html">GAME: Calculator</a></li>
                     <li><a href="./features/feature7/feature7.html">GAME: Cộng trừ lớp 2</a></li>
@@ -54,10 +57,10 @@
 
                 </ul>
             </nav>
-            
-            <button class="menu-toggle" aria-label="Toggle menu">
+
+            <!-- <button class="menu-toggle" aria-label="Toggle menu">
                 <i class="fas fa-bars"></i>
-            </button>
+            </button> -->
         </div>
     </header>
 
@@ -67,27 +70,88 @@
             <section class="welcome-section">
                 <h2>Chào mừng đến với MyFamilyWeb</h2>
                 <p>Trang web học tập dành cho các thành viên trong gia đình bạn.</p>
-                
+
+                <!-- 4 Danh mục chính -->
+                <div class="categories">
+                    <a href="#play" class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <h3>Chơi</h3>
+                        <p>Các trò chơi giải trí thú vị</p>
+                    </a>
+
+                    <a href="#play-learn" class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>Chơi & Học</h3>
+                        <p>Vừa chơi vừa học hiệu quả</p>
+                    </a>
+
+                    <a href="#learn" class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3>Học</h3>
+                        <p>Tài liệu học tập bổ ích</p>
+                    </a>
+
+                    <a href="#coding" class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>Coding</h3>
+                        <p>Lập trình và sáng tạo</p>
+                    </a>
+                </div>
+
+                <!-- Các phần chi tiết -->
+                <section id="play" class="category-section">
+                    <h2><i class="fas fa-gamepad"></i> Chơi</h2>
+                    <div class="features-grid">
+                        <!-- Các game thuần giải trí -->
+                        <li><a href="./features/feature2/feature2.html">Rắn săn mồi</a></li>
+                        <li><a href="./features/feature3/feature3.html">Game HÌNH VUÔNG ăn con bot</a></li>
+                        <li><a href="./features/feature4/feature4.html">Con Bot chơi Bóng đá</a></li>
+
+                        <!-- <article class="feature-card">
+                        <h3>GAME: Rắn săn mồi</h3>
+                        <p>Game cổ điển rắn săn mồi do Nhật Minh tạo ra.</p>
+                        <a href="./features/feature2/feature2.html" class="btn">Chơi ngay</a>
+                        
+                    </article>
+                    
+                    <article class="feature-card">
+                        <h3>GAME: Game Hình Vuông Ăn Bot</h3>
+                        <p>Game cổ điển hình vuông ăn bot chỉ cần di chuyển để ăn bot.</p>
+                        <a href="./features/feature3/feature3.html" class="btn">Chơi ngay</a>
+                    </article> -->
+
+                        <!-- Thêm các game khác vào đây -->
+                    </div>
+                </section>
+
                 <div class="features-grid">
                     <article class="feature-card">
                         <h3>Bảng chữ cái Hiragana</h3>
                         <p>Tính năng này sẽ hiển thị bảng chữ cái Hiragana với 1 click.</p>
                         <a href="./features/feature1/feature1.html" class="btn">Khám phá</a>
                     </article>
-                    
+
                     <article class="feature-card">
                         <h3>GAME: Rắn săn mồi</h3>
                         <p>Game cổ điển rắn săn mồi do Nhật Minh tạo ra.</p>
                         <a href="./features/feature2/feature2.html" class="btn">Khám phá</a>
                     </article>
-                    
+
                     <article class="feature-card">
                         <h3>GAME: Game Hình Vuông Ăn Bot</h3>
                         <p>Game cổ điển hình vuông ăn bot chỉ cần di chuyển để ăn bot.</p>
                         <a href="./features/feature3/feature3.html" class="btn">Khám phá</a>
                     </article>
 
-                   <article class="feature-card">
+                    <article class="feature-card">
                         <h3>GAME: Bóng đá</h3>
                         <p>Game cổ điển bóng đá chỉ cần di chuyển để ghi bàn.</p>
                         <a href="./features/feature4/feature4.html" class="btn">Khám phá</a>
@@ -103,14 +167,14 @@
                         <h3>GAME: Calculator</h3>
                         <p>Game tính toán đơn giản giúp bạn luyện tập kỹ năng tính toán.</p>
                         <a href="./features/feature6/feature6.html" class="btn">Khám phá</a>
-                        </article>
+                    </article>
 
                     <article class="feature-card">
                         <h3>GAME: Cộng trừ lớp 2</h3>
                         <p>Game cộng trừ đơn giản giúp bạn luyện tập kỹ năng cộng trừ.</p>
                         <a href="./features/feature7/feature7.html" class="btn">Khám phá</a>
-                    </article> 
-                    
+                    </article>
+
                     <article class="feature-card">
                         <h3>GAME: Nhấn nhanh</h3>
                         <p>Game nhấn nhanh giúp bạn luyện tập nhấn nhanh chóng.</p>
@@ -128,86 +192,93 @@
                         <p>Chatbot thông minh giúp bạn giải đáp thắc mắc và hỗ trợ học tập.</p>
                         <a href="./features/feature10/feature10.html" class="btn">Khám phá</a>
 
-                    <article class="feature-card">
-                        <h3>Bảng chữ cái Alphabet</h3>
-                        <p>Game Alphabet giúp bạn luyện tập kỹ năng tiếng Anh.</p>
-                        <a href="./features/feature11/feature11.html" class="btn">Khám phá</a>
+                        <article class="feature-card">
+                            <h3>Bảng chữ cái Alphabet</h3>
+                            <p>Game Alphabet giúp bạn luyện tập kỹ năng tiếng Anh.</p>
+                            <a href="./features/feature11/feature11.html" class="btn">Khám phá</a>
 
-                    </article>
-                    <article class="feature-card">
-                        <h3>Bảng chữ cái Hiragana + Clock</h3>
-                        <p>Game Hiragana + Clock giúp bạn luyện tập kỹ năng tiếng Nhật.</p>
-                        <a href="./features/feature12/feature12.html" class="btn">Khám phá</a>
-                    </article>
+                        </article>
+                        <article class="feature-card">
+                            <h3>Bảng chữ cái Hiragana + Clock</h3>
+                            <p>Game Hiragana + Clock giúp bạn luyện tập kỹ năng tiếng Nhật.</p>
+                            <a href="./features/feature12/feature12.html" class="btn">Khám phá</a>
+                        </article>
 
-                    <article class="feature-card">
-                        <h3>Facts!!!</h3>
-                        <p>Game Facts!!! giúp bạn hiểu biết thêm về các sự thật thú vị.</p>
-                        <a href="./features/feature13/feature13.html" class="btn">Khám phá</a>
+                        <article class="feature-card">
+                            <h3>Facts!!!</h3>
+                            <p>Game Facts!!! giúp bạn hiểu biết thêm về các sự thật thú vị.</p>
+                            <a href="./features/feature13/feature13.html" class="btn">Khám phá</a>
 
-                    <article class="feature-card">
-                        <h3>update soon!!!</h3>
-                        <p>update soon!!!</p>
-                        <a href="./features/feature14/feature14.html" class="btn">Khám phá</a>
+                            <article class="feature-card">
+                                <h3>update soon!!!</h3>
+                                <p>update soon!!!</p>
+                                <a href="./features/feature14/feature14.html" class="btn">Khám phá</a>
 
-                    <article class="feature-card">
-                        <h3>update soon!!!</h3>
-                        <p>update soon!!!</p>
-                        <a href="./features/feature15/feature15.html" class="btn">Khám phá</a>
+                                <article class="feature-card">
+                                    <h3>update soon!!!</h3>
+                                    <p>update soon!!!</p>
+                                    <a href="./features/feature15/feature15.html" class="btn">Khám phá</a>
 
-                    <article class="feature-card">
-                        <h3>update soon!!!</h3>
-                        <p>update soon!!!</p>
-                        <a href="./features/feature16/feature16.html" class="btn">Khám phá</a>
+                                    <article class="feature-card">
+                                        <h3>update soon!!!</h3>
+                                        <p>update soon!!!</p>
+                                        <a href="./features/feature16/feature16.html" class="btn">Khám phá</a>
 
-                    <article class="feature-card">
-                        <h3>update soon!!!</h3>
-                        <p>update soon!!!</p>
-                        <a href="./features/feature17/feature17.html" class="btn">Khám phá</a>
+                                        <article class="feature-card">
+                                            <h3>update soon!!!</h3>
+                                            <p>update soon!!!</p>
+                                            <a href="./features/feature17/feature17.html" class="btn">Khám phá</a>
 
-                    <article class="feature-card">
-                        <h3>update soon!!!</h3>
-                        <p>update soon!!!</p>
-                        <a href="./features/feature18/feature18.html" class="btn">Khám phá</a>
+                                            <article class="feature-card">
+                                                <h3>update soon!!!</h3>
+                                                <p>update soon!!!</p>
+                                                <a href="./features/feature18/feature18.html" class="btn">Khám phá</a>
 
-                    <article class="feature-card">
-                        <h3>update soon!!!</h3>
-                        <p>update soon!!!</p>
-                        <a href="./features/feature19/feature19.html" class="btn">Khám phá</a>
+                                                <article class="feature-card">
+                                                    <h3>update soon!!!</h3>
+                                                    <p>update soon!!!</p>
+                                                    <a href="./features/feature19/feature19.html" class="btn">Khám
+                                                        phá</a>
 
-                    <article class="feature-card">
-                        <h3>update soon!!!</h3>
-                        <p>update soon!!!</p>
-                        <a href="./features/feature20/feature20.html" class="btn">Khám phá</a>
+                                                    <article class="feature-card">
+                                                        <h3>update soon!!!</h3>
+                                                        <p>update soon!!!</p>
+                                                        <a href="./features/feature20/feature20.html" class="btn">Khám
+                                                            phá</a>
 
-                    <article class="feature-card">
-                        <h3>update soon!!!</h3>
-                        <p>update soon!!!</p>
-                        <a href="./features/feature21/feature21.html" class="btn">Khám phá</a>
+                                                        <article class="feature-card">
+                                                            <h3>update soon!!!</h3>
+                                                            <p>update soon!!!</p>
+                                                            <a href="./features/feature21/feature21.html"
+                                                                class="btn">Khám phá</a>
 
-                    <article class="feature-card">
-                        <h3>update soon!!!</h3>
-                        <p>update soon!!!</p>
-                        <a href="./features/feature22/feature22.html" class="btn">Khám phá</a>
+                                                            <article class="feature-card">
+                                                                <h3>update soon!!!</h3>
+                                                                <p>update soon!!!</p>
+                                                                <a href="./features/feature22/feature22.html"
+                                                                    class="btn">Khám phá</a>
 
-                    <article class="feature-card">
-                        <h3>update soon!!!</h3>
-                        <p>update soon!!!</p>
-                        <a href="./features/feature23/feature23.html" class="btn">Khám phá</a>
+                                                                <article class="feature-card">
+                                                                    <h3>update soon!!!</h3>
+                                                                    <p>update soon!!!</p>
+                                                                    <a href="./features/feature23/feature23.html"
+                                                                        class="btn">Khám phá</a>
 
-                    <article class="feature-card">
-                        <h3>update soon!!!</h3>
-                        <p>update soon!!!</p>
-                        <a href="./features/feature24/feature24.html" class="btn">Khám phá</a>
+                                                                    <article class="feature-card">
+                                                                        <h3>update soon!!!</h3>
+                                                                        <p>update soon!!!</p>
+                                                                        <a href="./features/feature24/feature24.html"
+                                                                            class="btn">Khám phá</a>
 
-                    <article class="feature-card">
-                        <h3>update soon!!!</h3>
-                        <p>update soon!!!</p>
-                        <a href="./features/feature25/feature25.html" class="btn">Khám phá</a>
-                    </article>
-                </section>
-            </div>
-        </main>
+                                                                        <article class="feature-card">
+                                                                            <h3>update soon!!!</h3>
+                                                                            <p>update soon!!!</p>
+                                                                            <a href="./features/feature25/feature25.html"
+                                                                                class="btn">Khám phá</a>
+                                                                        </article>
+            </section>
+        </div>
+    </main>
 
     <!-- Phần Footer -->
     <footer class="site-footer">
@@ -216,13 +287,21 @@
                 <h3>About MyFamilyWeb</h3>
                 <p>Dự án nhỏ giúp các thành viên trong gia đình cùng nhau học tập và phát triển.</p>
             </div>
-            
+
             <div class="footer-contact">
                 <h3>Liên hệ</h3>
                 <p>Email: vanhue87vn@gmail.com</p>
             </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Trang chủ</a></li>
+                    <li><a href="ReleaseNote.html">Release Notes</a></li>
+                    <li><a href="Privacy.html">Chính sách riêng tư</a></li>
+                </ul>
+            </div>
         </div>
-        
+
         <div class="copyright">
             <p>&copy; 2025 MyFamilyWeb. Tất cả quyền được bảo lưu.</p>
         </div>
@@ -232,4 +311,5 @@
     <script src="./js/utils/helpers.js"></script>
     <script src="./js/app.js"></script>
 </body>
+
 </html>
