@@ -6,10 +6,27 @@ body {
     text-align: left;
 }
 
-/* .logo {
-    height: 20px;
-    margin-bottom: 20px;
-} */
+.home-link {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    text-decoration: none;
+    color: #2c3e50;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.home-link:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
 
 .site-header {
     text-align: left;
