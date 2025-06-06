@@ -1,0 +1,42 @@
+        .feature-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #bdee8f;
+        }
+
+.logo {
+    height: 200px;
+    margin-bottom: 20px;
+}
+
+.-grid {
+    display: alphabet grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    gap: 10px;
+}
+
+.alphabet-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    background-color: #f9f9f9;
+    transition: transform 0.2s;
+}
+
+.alphabet-card:hover {
+    transform: scale(1.25);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.alphabet-char {
+    font-size: 64px;
+    font-weight: bold;
+}
+.alphabet-description {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #555;
+}

@@ -1,0 +1,53 @@
+        body { 
+            margin: 0; 
+            text-align: center; 
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        canvas { 
+            background: #000; 
+            display: block; 
+            margin: 20px auto; 
+            border: 2px solid #333;
+        }
+        h2 {
+            color: green;
+            margin-top: 20px;
+        }
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px;
+        }
+        #gameOver {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            z-index: 100;
+            text-align: center;
+            width: 300px;
+        }
+        #gameOver h3 {
+            color: red;
+            font-size: 30px;
+            margin-top: 0;
+        }
+        #gameOver button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        #gameOver button:hover {
+            background-color: #45a049;
+        }
