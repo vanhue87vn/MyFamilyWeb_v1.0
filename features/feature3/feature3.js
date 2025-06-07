@@ -203,3 +203,5 @@ window.addEventListener('resize', () => {
 
 // Bắt đầu game
 gameLoop();
+document.getElementById('botCount').textContent = bots.length;
+document.getElementById('size').textContent = Math.floor(square.size / 2);
