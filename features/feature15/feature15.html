@@ -1,44 +1,32 @@
-You said:
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8" />
-<title>Bóng Nảy Neon Cyberpunk - Có Chọn Độ Khó & 2 Nút Game Over</title>
-<link rel="stylesheet" href="../../css/main.css">
-<link rel="stylesheet" href="feature15.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Neon Paddle Game</title>
+    <!-- Liên kết đến CSS chính và CSS của feature -->
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="feature15.css">
 </head>
 <body>
-
-<div id="difficultySelect">
-  <label for="difficulty">Chọn độ khó: </label>
-  <select id="difficulty">
-    <option value="de">Dễ (20đ thêm 1 bóng)</option>
-    <option value="trungbinh" selected>Trung bình (10đ thêm 1 bóng)</option>
-    <option value="kho">Khó (5đ thêm 1 bóng)</option>
-    <option value="ratkho">Rất khó (2đ thêm 1 bóng)</option>
-    <option value="thientai">Thiên tài (1đ thêm 1 bóng)</option>
-  </select>
-  <button id="startGameBtn">Bắt đầu chơi</button>
-</div>
-
-<canvas id="gameCanvas" width="900" height="675"></canvas>
-<div id="score">Điểm: 0 | Kỷ lục: 0</div>
-
-<div id="gameOver">
-  Game Over!
-  <div>
-    <button id="restartBtn">Chơi lại</button>
-    <button id="homeBtn">Về trang chủ</button>
+  <h1>Neon Paddle Game</h1>
+  <canvas id="gameCanvas" width="600" height="400"></canvas>
+  <div id="difficultySelect">
+    <div id="preGameScore">Điểm: 0 | Kỷ lục: 0</div>
+    <label for="difficulty">Chọn độ khó:</label>
+    <select id="difficulty">
+      <option value="de">Dễ (20đ thêm bóng)</option>
+      <option value="trungbinh" selected>Trung bình (10đ thêm bóng)</option>
+      <option value="kho">Khó (5đ thêm bóng)</option>
+      <option value="ratkho">Rất khó (2đ thêm bóng)</option>
+      <option value="thientai">Thiên tài (1đ thêm bóng)</option>
+    </select>
+    <button id="startGameBtn">Bắt đầu chơi</button>
   </div>
-</div>
-
-<button id="toggleMusicBtn" title="Bật/Tắt nhạc">🔊</button>
-
-<!-- Âm thanh -->
-<audio id="bounceSound" src="https://actions.google.com/sounds/v1/sports/basketball_bounce.ogg" preload="auto"></audio>
-<audio id="gameOverSound" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg" preload="auto"></audio>
-<audio id="bgMusic" src="https://cdn.pixabay.com/download/audio/2023/03/06/audio_83f0beef3d.mp3?filename=arcade-music-loop-14052.mp3" loop preload="auto"></audio>
-
+  <div id="scoreBoard">Điểm: 0 | Kỷ lục: 0</div>
+    <!-- Liên kết đến JavaScript chính và feature -->
+    <script src="../../js/utils/helpers.js"></script>
+    <script src="../../js/app.js"></script>
     <script src="feature15.js"></script>
 </body>
-</html>
+</html> 

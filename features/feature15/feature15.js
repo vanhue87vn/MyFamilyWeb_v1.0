@@ -1,228 +1,189 @@
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const startBtn = document.getElementById('startGameBtn');
+    const difficultySelect = document.getElementById('difficulty');
+    const preGameScore = document.getElementById('preGameScore');
+    const scoreBoard = document.getElementById('scoreBoard');
 
-const difficultySelect = document.getElementById('difficulty');
-const startGameBtn = document.getElementById('startGameBtn');
-const scoreDisplay = document.getElementById('score');
-const gameOverDisplay = document.getElementById('gameOver');
-const restartBtn = document.getElementById('restartBtn');
-const homeBtn = document.getElementById('homeBtn');
-const toggleMusicBtn = document.getElementById('toggleMusicBtn');
+    let paddle = {
+      x: canvas.width / 2 - 50,
+      y: canvas.height - 20,
+      width: 100,
+      height: 10,
+      dx: 0,
+      speed: 7
+    };
 
-const bounceSound = document.getElementById('bounceSound');
-const gameOverSound = document.getElementById('gameOverSound');
-const bgMusic = document.getElementById('bgMusic');
+    let balls = [];
+    let score = 0;
+    let highScore = localStorage.getItem('highScore') || 0;
+    let gameInterval;
+    let gameRunning = false;
+    let difficulty = 'trungbinh';
+    let scoreToAddBall = 10;
 
-let balls = [];
-let paddle = {
-  width: 160,
-  height: 20,
-  x: (canvas.width - 160) / 2,
-  y: canvas.height - 50,
-  dx: 0,
-  speed: 10
-};
-let score = 0;
-let highScore = localStorage.getItem('highScore') || 0;
-let isGameOver = false;
-let musicStarted = false;
-let lastAddedBallScore = 0;
-let difficulty = 'trungbinh';
+    const paddleSound = new Audio('https://www.soundjay.com/button/beep-07.wav');
+    const scoreSound = new Audio('https://www.soundjay.com/button/beep-10.wav');
 
-const difficultySettings = {
-  de: 20,
-  trungbinh: 10,
-  kho: 5,
-  ratkho: 2,
-  thientai: 1
-};
+    function drawPaddle() {
+      ctx.fillStyle = '#0ff';
+      ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+    }
 
-function createBall() {
-  return {
-    x: Math.random() * (canvas.width - 50) + 25,
-    y: canvas.height / 2,
-    radius: 20,
-    dx: (Math.random() > 0.5 ? 1 : -1) * (6 + Math.random() * 3),
-    dy: -6,
-  };
-}
+    function drawBall(ball) {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+      ctx.fillStyle = '#0ff';
+      ctx.fill();
+      ctx.closePath();
+    }
 
-function resetGame() {
-  balls = [createBall()];
-  score = 0;
-  lastAddedBallScore = 0;
-  isGameOver = false;
-  paddle.x = (canvas.width - paddle.width) / 2;
-  updateScore();
-  gameOverDisplay.style.display = 'none';
-  restartBtn.style.display = 'none';
-  homeBtn.style.display = 'none';
-  toggleMusicBtn.style.display = 'block';
-  requestAnimationFrame(update);
-}
+    function movePaddle() {
+      paddle.x += paddle.dx;
+      if (paddle.x < 0) paddle.x = 0;
+      if (paddle.x + paddle.width > canvas.width) paddle.x = canvas.width - paddle.width;
+    }
 
-function updateScore() {
-  if (score > highScore) {
-    highScore = score;
-    localStorage.setItem('highScore', highScore);
-  }
-  scoreDisplay.textContent = `Điểm: ${score} | Kỷ lục: ${highScore}`;
-}
+    function moveBalls() {
+      balls.forEach(ball => {
+        ball.x += ball.dx;
+        ball.y += ball.dy;
 
-function drawPaddle() {
-  ctx.shadowColor = '#ff00ff';
-  ctx.shadowBlur = 30;
-  ctx.fillStyle = '#ff00ff';
-  ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-  ctx.shadowBlur = 0;
-}
+        // Wall collision
+        if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+          ball.dx *= -1;
+        }
+        if (ball.y - ball.radius < 0) {
+          ball.dy *= -1;
+        }
 
-function drawBalls() {
-  balls.forEach(ball => {
-    const gradient = ctx.createRadialGradient(
-      ball.x, ball.y, ball.radius / 3,
-      ball.x, ball.y, ball.radius
-    );
-    gradient.addColorStop(0, '#0ff');
-    gradient.addColorStop(1, 'rgba(0,255,255,0)');
-    ctx.fillStyle = gradient;
-    ctx.shadowColor = '#0ff';
-    ctx.shadowBlur = 25;
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.shadowBlur = 0;
-  });
-}
+        // Paddle collision
+        if (
+          ball.y + ball.radius > paddle.y &&
+          ball.x > paddle.x &&
+          ball.x < paddle.x + paddle.width
+        ) {
+          ball.dy *= -1;
+          paddleSound.play();
+          // Paddle glow effect
+          canvas.classList.add('glow');
+          setTimeout(() => canvas.classList.remove('glow'), 100);
+        }
 
-function movePaddle() {
-  paddle.x += paddle.dx;
-  if (paddle.x < 0) paddle.x = 0;
-  if (paddle.x + paddle.width > canvas.width)
-    paddle.x = canvas.width - paddle.width;
-}
+        // Bottom collision
+        if (ball.y - ball.radius > canvas.height) {
+          balls.splice(balls.indexOf(ball), 1);
+          if (balls.length === 0) {
+            endGame();
+          }
+        }
+      });
+    }
 
-function update() {
-  if (isGameOver) return;
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawPaddle();
+      balls.forEach(drawBall);
+    }
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawPaddle();
-  drawBalls();
-  movePaddle();
+    function update() {
+      movePaddle();
+      moveBalls();
+      draw();
+      updateScoreBoard();
+    }
 
-  balls.forEach((ball, index) => {
-    ball.x += ball.dx;
-    ball.y += ball.dy;
-
-    if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width)
-      ball.dx = -ball.dx;
-    if (ball.y - ball.radius < 0)
-      ball.dy = -ball.dy;
-
-    // Va chạm với paddle
-    if (
-      ball.y + ball.radius >= paddle.y &&
-      ball.y + ball.radius <= paddle.y + paddle.height &&
-      ball.x > paddle.x &&
-      ball.x < paddle.x + paddle.width
-    ) {
-      ball.dy = -Math.abs(ball.dy);
-      bounceSound.play();
-
-      // Tăng điểm + cập nhật điểm
-      score++;
-      updateScore();
-
-      // Tăng tốc bóng theo điểm
-      ball.dx *= 1.05;
-      ball.dy *= 1.05;
-
-      // Check điểm để thêm bóng mới theo độ khó
-      const addBallThreshold = difficultySettings[difficulty];
-      if (score - lastAddedBallScore >= addBallThreshold) {
-        balls.push(createBall());
-        lastAddedBallScore = score;
+    function gameLoop() {
+      update();
+      if (gameRunning) {
+        requestAnimationFrame(gameLoop);
       }
     }
 
-    // Bóng rơi dưới màn hình thì game over
-    if (ball.y - ball.radius > canvas.height) {
-      gameOver();
+    function startGame() {
+      paddle.x = canvas.width / 2 - 50;
+      balls = [{
+        x: canvas.width / 2,
+        y: canvas.height / 2,
+        dx: 3,
+        dy: -3,
+        radius: 8
+      }];
+      score = 0;
+      gameRunning = true;
+      difficulty = difficultySelect.value;
+      switch (difficulty) {
+        case 'de':
+          scoreToAddBall = 20;
+          break;
+        case 'trungbinh':
+          scoreToAddBall = 10;
+          break;
+        case 'kho':
+          scoreToAddBall = 5;
+          break;
+        case 'ratkho':
+          scoreToAddBall = 2;
+          break;
+        case 'thientai':
+          scoreToAddBall = 1;
+          break;
+      }
+      preGameScore.textContent = `Điểm: 0 | Kỷ lục: ${highScore}`;
+      gameLoop();
     }
-  });
 
-  requestAnimationFrame(update);
-}
+    function endGame() {
+      gameRunning = false;
+      if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('highScore', highScore);
+      }
+      preGameScore.textContent = `Điểm: 0 | Kỷ lục: ${highScore}`;
+      alert('Game Over!');
+    }
 
-function gameOver() {
-  isGameOver = true;
-  gameOverDisplay.style.display = 'block';
-  restartBtn.style.display = 'inline-block';
-  homeBtn.style.display = 'inline-block';
-  toggleMusicBtn.style.display = 'none';
-  gameOverSound.play();
-}
+    function updateScoreBoard() {
+      scoreBoard.textContent = `Điểm: ${score} | Kỷ lục: ${highScore}`;
+    }
 
-// Bắt sự kiện bàn phím để điều khiển paddle
-document.addEventListener('keydown', e => {
-  if (e.code === 'ArrowLeft') {
-    paddle.dx = -paddle.speed;
-  } else if (e.code === 'ArrowRight') {
-    paddle.dx = paddle.speed;
-  }
-});
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') {
+        paddle.dx = -paddle.speed;
+      } else if (e.key === 'ArrowRight') {
+        paddle.dx = paddle.speed;
+      }
+    });
 
-document.addEventListener('keyup', e => {
-  if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
-    paddle.dx = 0;
-  }
-});
+    document.addEventListener('keyup', e => {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        paddle.dx = 0;
+      }
+    });
 
-// Bật/tắt nhạc nền
-toggleMusicBtn.addEventListener('click', () => {
-  if (!musicStarted) {
-    bgMusic.volume = 0.3;
-    bgMusic.play();
-    musicStarted = true;
-    toggleMusicBtn.textContent = '🔊';
-  } else if (bgMusic.paused) {
-    bgMusic.play();
-    toggleMusicBtn.textContent = '🔊';
-  } else {
-    bgMusic.pause();
-    toggleMusicBtn.textContent = '🔈';
-  }
-});
+    startBtn.addEventListener('click', () => {
+      startGame();
+    });
 
-// Bắt đầu game từ menu chọn độ khó
-startGameBtn.addEventListener('click', () => {
-  difficulty = difficultySelect.value;
-  document.getElementById('difficultySelect').style.display = 'none';
-  scoreDisplay.style.display = 'block';
-  resetGame();
-});
+    // Increase score and add balls based on difficulty
+    setInterval(() => {
+      if (gameRunning) {
+        score++;
+        if (score % scoreToAddBall === 0) {
+          balls.push({
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            dx: 3 * (Math.random() > 0.5 ? 1 : -1),
+            dy: -3,
+            radius: 8
+          });
+          scoreSound.play();
+        }
+      }
+    }, 1000);
 
-// Xử lý nút chơi lại
-restartBtn.addEventListener('click', () => {
-  resetGame();
-  scoreDisplay.style.display = 'block';
-  gameOverDisplay.style.display = 'none';
-  restartBtn.style.display = 'none';
-  homeBtn.style.display = 'none';
-  toggleMusicBtn.style.display = 'block';
-});
-
-// Xử lý nút về trang chủ
-homeBtn.addEventListener('click', () => {
-  isGameOver = false;
-  balls = [];
-  score = 0;
-  lastAddedBallScore = 0;
-  scoreDisplay.style.display = 'none';
-  gameOverDisplay.style.display = 'none';
-  restartBtn.style.display = 'none';
-  homeBtn.style.display = 'none';
-  toggleMusicBtn.style.display = 'none';
-  document.getElementById('difficultySelect').style.display = 'block';
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-});
+    // Initialize high score display
+    preGameScore.textContent = `Điểm: 0 | Kỷ lục: ${highScore}`;
+    scoreBoard.textContent = `Điểm: 0 | Kỷ lục: ${highScore}`;
+    // Add glow effect to canvas
+    canvas.classList.add('glow');   
