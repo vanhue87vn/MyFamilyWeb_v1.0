@@ -1,32 +1,22 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Neon Paddle Game</title>
+<meta charset="UTF-8" />
+<title>Mê Cung Có Bẫy & Quái Vật - AI nâng cao</title>
     <!-- Liên kết đến CSS chính và CSS của feature -->
     <link rel="stylesheet" href="../../css/main.css">
     <link rel="stylesheet" href="feature15.css">
 </head>
 <body>
-  <h1>Neon Paddle Game</h1>
-  <canvas id="gameCanvas" width="600" height="400"></canvas>
-  <div id="difficultySelect">
-    <div id="preGameScore">Điểm: 0 | Kỷ lục: 0</div>
-    <label for="difficulty">Chọn độ khó:</label>
-    <select id="difficulty">
-      <option value="de">Dễ (20đ thêm bóng)</option>
-      <option value="trungbinh" selected>Trung bình (10đ thêm bóng)</option>
-      <option value="kho">Khó (5đ thêm bóng)</option>
-      <option value="ratkho">Rất khó (2đ thêm bóng)</option>
-      <option value="thientai">Thiên tài (1đ thêm bóng)</option>
-    </select>
-    <button id="startGameBtn">Bắt đầu chơi</button>
-  </div>
-  <div id="scoreBoard">Điểm: 0 | Kỷ lục: 0</div>
+
+<h1>Mê Cung Có Bẫy & Quái Vật - AI nâng cao</h1>
+<div id="lives">Mạng sống: 3</div>
+<div id="status">AI: Tắt</div>
+<canvas id="maze" width="600" height="600"></canvas>
+
     <!-- Liên kết đến JavaScript chính và feature -->
     <script src="../../js/utils/helpers.js"></script>
     <script src="../../js/app.js"></script>
     <script src="feature15.js"></script>
 </body>
-</html> 
+</html>
