@@ -1,22 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>Mê Cung Có Bẫy & Quái Vật - AI nâng cao</title>
-    <!-- Liên kết đến CSS chính và CSS của feature -->
-    <link rel="stylesheet" href="../../css/main.css">
-    <link rel="stylesheet" href="feature15.css">
-</head>
-<body>
+<html lang="vi">
 
-<h1>Mê Cung Có Bẫy & Quái Vật - AI nâng cao</h1>
-<div id="lives">Mạng sống: 3</div>
-<div id="status">AI: Tắt</div>
-<canvas id="maze" width="600" height="600"></canvas>
+<head>
+    <meta charset="UTF-8" />
+    <title>Mê cung nâng cấp - Khó hơn</title>
+    <link rel="stylesheet" href="feature15.css" />
+    <link rel="stylesheet" href="../../css/main.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+    <div id="info">
+        <div id="status">AI: Tắt</div>
+        <div id="lives">Mạng sống: 3</div>
+        <button id="musicToggle">🔊 Bật/Tắt nhạc</button>
+    </div>
+    <canvas id="maze" width="600" height="600"></canvas>
+
+    <audio id="moveSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_350fba4e96.mp3"></audio>
+    <audio id="winSound" src="https://cdn.pixabay.com/audio/2021/09/02/audio_d4f3c2c225.mp3"></audio>
+    <audio id="loseSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_6c2d0b2821.mp3"></audio>
+    <audio id="bgMusic" src="https://cdn.pixabay.com/audio/2023/03/23/audio_d73efc1f70.mp3" loop></audio>
 
     <!-- Liên kết đến JavaScript chính và feature -->
     <script src="../../js/utils/helpers.js"></script>
     <script src="../../js/app.js"></script>
-    <script src="feature15.js"></script>
+    <script src="feature1.js"></script>
 </body>
+
 </html>
