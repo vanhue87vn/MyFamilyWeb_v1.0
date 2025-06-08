@@ -12,7 +12,7 @@ let food = {};
 let direction = null;
 let nextDirection = null;
 let score = 0;
-let gameSpeed = 250;
+let gameSpeed = 300;
 let gameInterval;
 let gameActive = true;
 let touchStartX = 0;
@@ -165,7 +165,7 @@ function restartGame() {
     nextDirection = null;
     score = 0;
     scoreDisplay.textContent = '0';
-    gameSpeed = 150;
+    gameSpeed = 300;
     gameActive = true;
     gameOverScreen.style.display = 'none';
     
