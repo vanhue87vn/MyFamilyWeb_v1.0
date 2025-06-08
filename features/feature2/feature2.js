@@ -12,7 +12,7 @@ let food = {};
 let direction = null;
 let nextDirection = null;
 let score = 0;
-let gameSpeed = 150;
+let gameSpeed = 250;
 let gameInterval;
 let gameActive = true;
 let touchStartX = 0;
@@ -209,7 +209,7 @@ function gameLoop() {
         food = generateFood();
         
         // Increase speed
-        if (score % 5 === 0 && gameSpeed > 100) {
+        if (score % 5 === 0 && gameSpeed > 60) {
             gameSpeed -= 10;
             clearInterval(gameInterval);
             gameInterval = setInterval(gameLoop, gameSpeed);
