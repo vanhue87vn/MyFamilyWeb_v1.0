@@ -14,7 +14,7 @@ world.solver.iterations = 10;
 
 // Tạo sân bóng
 const groundGeometry = new THREE.PlaneGeometry(40, 25);
-const groundMaterial = new THREE.MeshStandardMaterial({ 
+const groundMaterial = new THREE.MeshStandardMaterial({
     color: 0x00AA00,
     side: THREE.DoubleSide
 });
@@ -41,7 +41,7 @@ scene.add(line);
 function createGoal(x, z, color) {
     // Khung thành chính
     const goalGeometry = new THREE.BoxGeometry(3, 2, 1.5);
-    const goalMaterial = new THREE.MeshStandardMaterial({ 
+    const goalMaterial = new THREE.MeshStandardMaterial({
         color: color,
         transparent: true,
         opacity: 0.7
@@ -50,33 +50,33 @@ function createGoal(x, z, color) {
     goal.position.set(x, 1, z);
     goal.castShadow = true;
     scene.add(goal);
-    
+
     // Cột dọc
     const postGeometry = new THREE.CylinderGeometry(0.1, 0.1, 2.5);
     const postMaterial = new THREE.MeshStandardMaterial({ color: 0xFFFFFF });
-    
+
     // 2 cột dọc
     const leftPost = new THREE.Mesh(postGeometry, postMaterial);
     leftPost.position.set(x, 1.25, z - 1.25);
     scene.add(leftPost);
-    
+
     const rightPost = new THREE.Mesh(postGeometry, postMaterial);
     rightPost.position.set(x, 1.25, z + 1.25);
     scene.add(rightPost);
-    
+
     // Xà ngang
     const crossbarGeometry = new THREE.BoxGeometry(0.2, 0.2, 2.5);
     const crossbar = new THREE.Mesh(crossbarGeometry, postMaterial);
     crossbar.position.set(x, 2.25, z);
     scene.add(crossbar);
-    
+
     // Vật lý cho khung thành
     const goalShape = new CANNON.Box(new CANNON.Vec3(1.5, 1, 0.75));
     const goalBody = new CANNON.Body({ mass: 0 });
     goalBody.addShape(goalShape);
     goalBody.position.set(x, 1, z);
     world.addBody(goalBody);
-    
+
     return { goal, goalBody };
 }
 
@@ -87,7 +87,7 @@ const botGoal = createGoal(20, 0, 0xFF0000);
 
 // Tạo bóng
 const ballGeometry = new THREE.SphereGeometry(0.5, 32, 32);
-const ballMaterial = new THREE.MeshStandardMaterial({ 
+const ballMaterial = new THREE.MeshStandardMaterial({
     color: 0xFFFFFF,
     roughness: 0.1,
     metalness: 0.3
@@ -159,7 +159,7 @@ camera.lookAt(0, 0, 0);
 const keys = {};
 document.addEventListener('keydown', (event) => {
     keys[event.code] = true;
-    
+
     // Reset game
     if (event.code === 'KeyR') {
         resetGame();
@@ -179,19 +179,19 @@ function updateBot() {
     // Tính khoảng cách giữa bot và bóng
     const ballPos = ballBody.position;
     const botPos = botBody.position;
-    
+
     // Vector hướng từ bot đến bóng
     const direction = new CANNON.Vec3();
     direction.set(ballPos.x - botPos.x, 0, ballPos.z - botPos.z);
     direction.normalize();
-    
+
     // Nếu bóng ở phía bên kia sân (gần khung thành của bot)
     if (ballPos.x > 0) {
         // Bot sẽ đuổi theo bóng
         const speed = 5;
         botBody.velocity.x = direction.x * speed;
         botBody.velocity.z = direction.z * speed;
-        
+
         // Nếu bot gần bóng thì sút
         const distance = botPos.distanceTo(ballPos);
         if (distance < 3) {
@@ -206,7 +206,7 @@ function updateBot() {
         const homeDirection = new CANNON.Vec3();
         homeDirection.set(homePos.x - botPos.x, 0, homePos.z - botPos.z);
         homeDirection.normalize();
-        
+
         const speed = 3;
         botBody.velocity.x = homeDirection.x * speed;
         botBody.velocity.z = homeDirection.z * speed;
@@ -218,10 +218,10 @@ function resetBall() {
     ballBody.position.set(0, 2, 0);
     ballBody.velocity.set(0, 0, 0);
     ballBody.angularVelocity.set(0, 0, 0);
-    
+
     playerBody.position.set(0, 0.9, 0);
     playerBody.velocity.set(0, 0, 0);
-    
+
     botBody.position.set(10, 0.9, 0);
     botBody.velocity.set(0, 0, 0);
 }
@@ -238,20 +238,20 @@ function resetGame() {
 const clock = new THREE.Clock();
 function animate() {
     requestAnimationFrame(animate);
-    
+
     const delta = clock.getDelta();
     world.step(delta);
-    
+
     // Cập nhật vị trí đồ họa từ vật lý
     ball.position.copy(ballBody.position);
     ball.quaternion.copy(ballBody.quaternion);
-    
+
     player.position.copy(playerBody.position);
     player.quaternion.copy(playerBody.quaternion);
-    
+
     bot.position.copy(botBody.position);
     bot.quaternion.copy(botBody.quaternion);
-    
+
     // Điều khiển cầu thủ của bạn
     const speed = 7;
     if (keys['ArrowUp']) {
@@ -261,7 +261,7 @@ function animate() {
     } else {
         playerBody.velocity.z = 0;
     }
-    
+
     if (keys['ArrowLeft']) {
         playerBody.velocity.x = -speed;
     } else if (keys['ArrowRight']) {
@@ -269,7 +269,7 @@ function animate() {
     } else {
         playerBody.velocity.x = 0;
     }
-    
+
     if (keys['Space']) {
         // Sút bóng nếu gần bóng
         const distance = playerBody.position.distanceTo(ballBody.position);
@@ -282,39 +282,39 @@ function animate() {
             ballBody.velocity.copy(direction);
         }
     }
-    
+
     // Cập nhật AI cho bot
     updateBot();
-    
+
     // Kiểm tra ghi bàn
     const ballPos = ballBody.position;
-    
+
     // Bạn ghi bàn (bóng vào khung thành bot)
     if (ballPos.x > 19 && ballPos.z > -1.5 && ballPos.z < 1.5) {
         yourScore++;
         scoreElement.textContent = `Bạn: ${yourScore} - Bot: ${botScore}`;
         resetBall();
     }
-    
+
     // Bot ghi bàn (bóng vào khung thành của bạn)
     if (ballPos.x < -19 && ballPos.z > -1.5 && ballPos.z < 1.5) {
         botScore++;
         scoreElement.textContent = `Bạn: ${yourScore} - Bot: ${botScore}`;
         resetBall();
     }
-    
+
     // Giới hạn di chuyển cho cầu thủ
     if (playerBody.position.x < -18) playerBody.position.x = -18;
     if (playerBody.position.x > 18) playerBody.position.x = 18;
     if (playerBody.position.z < -10) playerBody.position.z = -10;
     if (playerBody.position.z > 10) playerBody.position.z = 10;
-    
+
     // Giới hạn di chuyển cho bot
     if (botBody.position.x < 0) botBody.position.x = 0;
     if (botBody.position.x > 18) botBody.position.x = 18;
     if (botBody.position.z < -10) botBody.position.z = -10;
     if (botBody.position.z > 10) botBody.position.z = 10;
-    
+
     renderer.render(scene, camera);
 }
 

@@ -1,12 +1,12 @@
-body { 
-    margin: 0; 
-    overflow: hidden; 
+body {
+    margin: 0;
+    overflow: hidden;
     background-color: #87CEEB;
     font-family: Arial, sans-serif;
 }
 
-canvas { 
-    display: block; 
+canvas {
+    display: block;
 }
 
 #info {
@@ -34,7 +34,7 @@ canvas {
     bottom: 20px;
     left: 20px;
     color: white;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     padding: 10px;
     border-radius: 5px;
 }
