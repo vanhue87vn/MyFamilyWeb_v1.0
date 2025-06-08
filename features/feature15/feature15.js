@@ -7,7 +7,7 @@ const DIFFICULTY = {
   BRICK_DURABILITY: 10,
   GRAVITY: 0.35,
   BOUNCE_DECAY: 0.98,
-  TIME_LIMIT: 5, // 5 minutes
+  TIME_LIMIT: 300, // 300 seconds
   TIME_DECREASE_PER_LEVEL: 5,
   BALL_GROWTH_PER_LEVEL: 0.5,
   RANDOM_TELEPORT_CHANCE: 0.01,
@@ -26,7 +26,7 @@ const POWER_UPS = {
   WIDEN_PADDLE: { color: '#0f0', symbol: 'W', duration: 10000 },
   EXTRA_LIFE: { color: '#f00', symbol: 'L', duration: 0 },
   SLOW_TIME: { color: '#0ff', symbol: 'S', duration: 8000 },
-  MULTI_BALL: { color: '#ff0', symbol: 'M', duration: 0 }
+  MULTI_BALL: { color: '#ff0', symbol: 'M', duration: 10000 }
 };
 
 // ======================
@@ -34,7 +34,7 @@ const POWER_UPS = {
 // ======================
 let gameRunning = false;
 let score = 0;
-let lives = 1;
+let lives = 5;
 let level = 1;
 let timeLeft = DIFFICULTY.TIME_LIMIT;
 let animationId;
