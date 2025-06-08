@@ -253,7 +253,7 @@ function initGame() {
     function resizeCanvas() {
         const gameContainer = document.getElementById('game-container') || document.body;
         const containerWidth = gameContainer.clientWidth;
-        const canvasSize = Math.min(containerWidth, 500); // Giới hạn tối đa 500px
+        const canvasSize = Math.min(containerWidth, 400); // Giới hạn tối đa 500px
         
         // Đặt kích thước canvas (tính bằng pixel)
         canvas.width = canvasSize;
