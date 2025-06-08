@@ -209,8 +209,8 @@ function gameLoop() {
         food = generateFood();
         
         // Increase speed
-        if (score % 5 === 0 && gameSpeed > 60) {
-            gameSpeed -= 10;
+        if (score % 3 === 0 && gameSpeed > 60) {
+            gameSpeed -= 20;
             clearInterval(gameInterval);
             gameInterval = setInterval(gameLoop, gameSpeed);
         }
