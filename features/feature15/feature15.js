@@ -2,23 +2,23 @@
 // GAME CONSTANTS
 // ======================
 const DIFFICULTY = {
-  INITIAL_BALL_SPEED: 8,
-  SPEED_INCREASE_PER_LEVEL: 1,
-  PADDLE_SHRINK_PER_LEVEL: 15,
-  BRICK_DURABILITY: 7,
-  GRAVITY: 0.3,
+  INITIAL_BALL_SPEED: 5,
+  SPEED_INCREASE_PER_LEVEL: 3,
+  BRICK_DURABILITY: 10,
+  GRAVITY: 0.35,
   BOUNCE_DECAY: 0.98,
-  TIME_LIMIT: 40,
+  TIME_LIMIT: 5, // 5 minutes
   TIME_DECREASE_PER_LEVEL: 5,
   BALL_GROWTH_PER_LEVEL: 0.5,
   RANDOM_TELEPORT_CHANCE: 0.01,
-  SPEED_MULTIPLIER: 1.1,
-  TIMER_WARNING_THRESHOLD: 20, // 20 seconds
-  COMBO_THRESHOLD: 5, // Combo starts at 5 hits
-  COMBO_DECAY_TIME: 2000, // 2 seconds
-  POWER_UP_CHANCE: 0.2, // 20% chance for power-up drop
-  POWER_UP_SPEED: 2,
-  SCREEN_SHAKE_DURATION: 500 // 0.5 seconds
+  SPEED_MULTIPLIER: 2.9 , // Speed multiplier for speed-up bricks
+  PADDLE_SHRINK_PER_SECOND: 0.75, // Paddle shrinks by 0.75 pixels per second
+  TIMER_WARNING_THRESHOLD: 60, // 60 seconds
+  COMBO_THRESHOLD: 3, // Combo starts at 3 hits
+  COMBO_DECAY_TIME: 5000, // 5 seconds
+  POWER_UP_CHANCE: 0.5, // 50% chance for power-up drop
+  POWER_UP_SPEED: 5, // Speed of power-ups falling
+  SCREEN_SHAKE_DURATION: 1000 // 1 second
 };
 
 // Power-up types
