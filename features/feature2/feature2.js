@@ -4,15 +4,15 @@ const ctx = canvas.getContext('2d');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const finalScore = document.getElementById('finalScore');
 const gameOverScreen = document.getElementById('gameOver');
-const box = 20; // Kích thước ô vuông (20x20)
+let box = 20; // Kích thước ô vuông (sẽ được điều chỉnh)
 
 // Game state variables
-let snake = [{x: 10 * box, y: 10 * box}];
-let food = generateFood();
+let snake = [];
+let food = {};
 let direction = null;
 let nextDirection = null;
 let score = 0;
-let gameSpeed = 200;
+let gameSpeed = 150;
 let gameInterval;
 let gameActive = true;
 let touchStartX = 0;
@@ -105,10 +105,11 @@ function setupMobileControls() {
 // ================ Core Game Functions ================
 function generateFood() {
     let newFood;
+    const maxPos = Math.floor(canvas.width / box);
     do {
         newFood = {
-            x: Math.floor(Math.random() * (canvas.width / box)) * box,
-            y: Math.floor(Math.random() * (canvas.height / box)) * box
+            x: Math.floor(Math.random() * maxPos) * box,
+            y: Math.floor(Math.random() * maxPos) * box
         };
     } while (snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
     return newFood;
@@ -157,13 +158,14 @@ function showGameOver() {
 }
 
 function restartGame() {
-    snake = [{x: 10 * box, y: 10 * box}];
+    const startPos = Math.floor((canvas.width / box) / 2) * box;
+    snake = [{x: startPos, y: startPos}];
     food = generateFood();
     direction = null;
     nextDirection = null;
     score = 0;
     scoreDisplay.textContent = '0';
-    gameSpeed = 200;
+    gameSpeed = 150;
     gameActive = true;
     gameOverScreen.style.display = 'none';
     
@@ -227,31 +229,58 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown' && direction !== 'UP') nextDirection = 'DOWN';
     if (e.key === 'ArrowLeft' && direction !== 'RIGHT') nextDirection = 'LEFT';
     if (e.key === 'ArrowRight' && direction !== 'LEFT') nextDirection = 'RIGHT';
-    if (e.key === 'F5') {
+    if (e.key === 'r' || e.key === 'R') {
         e.preventDefault();
         restartGame();
     }
 });
 
+// Hàm debounce để tránh resize liên tục
+function debounce(func, wait) {
+    let timeout;
+    return function() {
+        const context = this, args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            func.apply(context, args);
+        }, wait);
+    };
+}
+
 // ================ Initialize Game ================
 function initGame() {
     // Setup responsive canvas
     function resizeCanvas() {
-        const maxWidth = Math.min(400, window.innerWidth - 40);
-        canvas.style.width = `${maxWidth}px`;
-        canvas.style.height = `${maxWidth}px`;
-        canvas.width = maxWidth;
-        canvas.height = maxWidth;
+        const gameContainer = document.getElementById('game-container') || document.body;
+        const containerWidth = gameContainer.clientWidth;
+        const canvasSize = Math.min(containerWidth, 500); // Giới hạn tối đa 500px
+        
+        // Đặt kích thước canvas (tính bằng pixel)
+        canvas.width = canvasSize;
+        canvas.height = canvasSize;
+        
+        // Đặt lại box size dựa trên kích thước mới
+        box = Math.max(15, Math.floor(canvasSize / 25)); // Đảm bảo box không quá nhỏ
+        
+        // Reset game state nếu đang chạy
+        if (gameActive) {
+            const startPos = Math.floor((canvasSize / box) / 2) * box;
+            snake = [{x: startPos, y: startPos}];
+            food = generateFood();
+        }
     }
     
+    // Thực hiện resize ngay lần đầu
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    
+    // Thêm event listener với debounce
+    window.addEventListener('resize', debounce(resizeCanvas, 100));
     
     // Setup mobile controls if needed
     setupMobileControls();
     
     // Start game
-    gameInterval = setInterval(gameLoop, gameSpeed);
+    restartGame(); // Sử dụng hàm restart để khởi tạo game state
 }
 
 // Start the game when DOM is loaded
