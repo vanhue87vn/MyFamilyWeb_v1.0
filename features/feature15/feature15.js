@@ -11,7 +11,7 @@ const DIFFICULTY = {
   TIME_DECREASE_PER_LEVEL: 5,
   BALL_GROWTH_PER_LEVEL: 0.5,
   RANDOM_TELEPORT_CHANCE: 0.01,
-  SPEED_MULTIPLIER: 2.9 , // Speed multiplier for speed-up bricks
+  SPEED_MULTIPLIER: 2.9, // Speed multiplier for speed-up bricks
   PADDLE_SHRINK_PER_SECOND: 0.75, // Paddle shrinks by 0.75 pixels per second
   TIMER_WARNING_THRESHOLD: 60, // 60 seconds
   COMBO_THRESHOLD: 3, // Combo starts at 3 hits
@@ -34,7 +34,7 @@ const POWER_UPS = {
 // ======================
 let gameRunning = false;
 let score = 0;
-let lives = 5;
+let lives = 1;
 let level = 1;
 let timeLeft = DIFFICULTY.TIME_LIMIT;
 let animationId;
