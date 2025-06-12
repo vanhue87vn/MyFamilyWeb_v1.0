@@ -11,7 +11,7 @@ const config = {
 const elements = {
     hiraganaBoard: document.getElementById('hiraganaBoard'),
     ball: document.getElementById('ball'),
-    romajiDisplay: document.getElementById('romaji'), // Thêm hiển thị romaji
+    romajiDisplay: document.getElementById('romaji'),
     message: document.getElementById('message'),
     timeDisplay: document.getElementById('time'),
     scoreDisplay: document.getElementById('score'),
@@ -25,7 +25,7 @@ const elements = {
 
 // Game state
 let state = {
-    currentCharacter: null, // Giờ sẽ lưu cả object character
+    currentCharacter: null,
     score: 0,
     level: 1,
     timeLeft: config.initialTime,
@@ -40,11 +40,8 @@ let state = {
 // Initialize the game
 async function initGame() {
     try {
-        // Load hiragana data from JSON
         const response = await fetch('../../data/JSON/hiragana-basic.json');
         const data = await response.json();
-        
-        // Lọc bỏ các ký tự trong ngoặc đơn (nếu muốn)
         state.hiraganaData = data.filter(item => !item.character.startsWith('('));
         
         resetGameState();
@@ -59,20 +56,21 @@ async function initGame() {
 function resetGameState() {
     state.gameActive = true;
     state.roundActive = true;
+    state.score = 0; // Reset score
+    state.level = 1; // Reset level
+    state.mistakes = 0; // Reset mistakes
+    state.timeLeft = config.initialTime; // Reset to initial time
     clearInterval(state.timer);
-    state.timeLeft = Math.max(10, config.initialTime - (state.level * config.timeDecreasePerLevel));
-    state.mistakes = 0;
+    elements.gameOverScreen.style.display = 'none'; // Hide game-over screen
     updateDisplays();
 }
 
 function setupEventListeners() {
-    // Ball drag and drop
     elements.ball.addEventListener('dragstart', handleDragStart);
-    
-    // Restart button
-    elements.restartButton.addEventListener('click', initGame);
-    
-    // Prevent default drag behavior
+    elements.restartButton.addEventListener('click', () => {
+        resetGameState();
+        initGame(); // Restart the game fully
+    });
     document.addEventListener('dragover', (e) => e.preventDefault());
     document.addEventListener('drop', (e) => e.preventDefault());
 }
@@ -82,15 +80,12 @@ function startNewRound() {
     clearInterval(state.timer);
     updateDisplays();
     
-    // Clear the board
     elements.hiraganaBoard.innerHTML = '';
     state.cells = [];
     
-    // Create 4x4 grid
     const totalCells = config.gridSize * config.gridSize;
     const selectedCharacters = getRandomCharacters(totalCells);
     
-    // Display cells
     selectedCharacters.forEach(char => {
         const cell = document.createElement('div');
         cell.className = 'hiragana-cell';
@@ -98,7 +93,6 @@ function startNewRound() {
         cell.dataset.character = char.character;
         cell.dataset.romaji = char.romaji;
         
-        // Add event listeners
         cell.addEventListener('dragover', (e) => e.preventDefault());
         cell.addEventListener('drop', (e) => handleAnswer(e, cell));
         cell.addEventListener('click', () => handleAnswer(null, cell));
@@ -107,20 +101,15 @@ function startNewRound() {
         state.cells.push(cell);
     });
     
-    // Set random character for the ball
     const randomIndex = Math.floor(Math.random() * totalCells);
     state.currentCharacter = selectedCharacters[randomIndex];
     elements.ball.textContent = state.currentCharacter.character;
     
-    // Hiển thị romaji tương ứng
     if (elements.romajiDisplay) {
         elements.romajiDisplay.textContent = state.currentCharacter.romaji;
     }
     
-    // Start timer
     state.timer = setInterval(updateTimer, 100);
-    
-    // Update message
     elements.message.textContent = `Find: ${state.currentCharacter.character}`;
     elements.message.style.color = '#2d3436';
 }
@@ -145,15 +134,14 @@ function handleAnswer(e, cell) {
     const selectedCharacter = cell.dataset.character;
     
     if (selectedCharacter === state.currentCharacter.character) {
-        // Correct answer
         cell.classList.add('correct');
         state.score += config.baseScorePerCorrect * state.level;
         updateDisplays();
         
-        // Check for level up
         const newLevel = Math.floor(state.score / 100) + 1;
         if (newLevel > state.level) {
             state.level = newLevel;
+            state.timeLeft = Math.max(5, config.initialTime - (state.level * config.timeDecreasePerLevel)); // Adjust time for new level
             elements.message.textContent = `Level Up! Now level ${state.level}`;
         } else {
             elements.message.textContent = `Correct! +${config.baseScorePerCorrect * state.level} points`;
@@ -161,22 +149,18 @@ function handleAnswer(e, cell) {
         
         endRound(true);
     } else {
-        // Wrong answer
         cell.classList.add('wrong');
         state.mistakes++;
         updateDisplays();
         
-        // Lock cell temporarily
         cell.style.pointerEvents = 'none';
         setTimeout(() => {
             cell.style.pointerEvents = 'auto';
             cell.classList.remove('wrong');
         }, 1000);
         
-        // Penalty
         state.timeLeft = Math.max(1, state.timeLeft - 2);
         
-        // Check mistakes
         if (state.mistakes >= config.maxMistakes) {
             endGame();
             return;
@@ -192,7 +176,6 @@ function updateTimer() {
     state.timeLeft -= 0.1;
     updateDisplays();
     
-    // Update progress bar
     const maxTime = config.initialTime - (state.level * config.timeDecreasePerLevel);
     const percentage = (state.timeLeft / maxTime) * 100;
     elements.progressBar.style.width = `${Math.max(0, percentage)}%`;
@@ -223,9 +206,8 @@ function endRound(success) {
     if (!success) {
         elements.message.textContent = `Time's up! ${config.maxMistakes - state.mistakes} mistakes left`;
         
-        // Highlight correct answer
         state.cells.forEach(cell => {
-            if (cell.dataset.hiragana === state.currentHiragana) {
+            if (cell.dataset.character === state.currentCharacter.character) {
                 cell.classList.add('correct');
             }
         });
@@ -233,7 +215,7 @@ function endRound(success) {
     
     setTimeout(() => {
         if (state.gameActive) {
-            resetGameState();
+            state.timeLeft = Math.max(5, config.initialTime - (state.level * config.timeDecreasePerLevel)); // Reset time for new round
             startNewRound();
         }
     }, success ? 1500 : 3000);
@@ -249,5 +231,4 @@ function endGame() {
     elements.gameOverScreen.style.display = 'flex';
 }
 
-// Start the game when DOM is loaded
 document.addEventListener('DOMContentLoaded', initGame);
