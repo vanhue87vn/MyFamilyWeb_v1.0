@@ -1,6 +1,6 @@
 // Game configuration
 const config = {
-    gridSize: 5, // 4x4 grid
+    gridSize: 5,
     initialTime: 10,
     maxMistakes: 3,
     timeDecreasePerLevel: 2,
@@ -56,20 +56,30 @@ async function initGame() {
 function resetGameState() {
     state.gameActive = true;
     state.roundActive = true;
-    state.score = 0; // Reset score
-    state.level = 1; // Reset level
-    state.mistakes = 0; // Reset mistakes
-    state.timeLeft = config.initialTime; // Reset to initial time
+    state.score = 0;
+    state.level = 1;
+    state.mistakes = 0;
+    state.timeLeft = config.initialTime;
     clearInterval(state.timer);
-    elements.gameOverScreen.style.display = 'none'; // Hide game-over screen
+    elements.gameOverScreen.style.display = 'none';
     updateDisplays();
 }
 
 function setupEventListeners() {
     elements.ball.addEventListener('dragstart', handleDragStart);
+    elements.ball.addEventListener('dragend', () => {
+        elements.ball.classList.remove('dragging');
+    });
+    elements.ball.addEventListener('touchstart', (e) => {
+        if (!state.gameActive || !state.roundActive) return;
+        elements.ball.classList.add('dragging');
+    });
+    elements.ball.addEventListener('touchend', () => {
+        elements.ball.classList.remove('dragging');
+    });
     elements.restartButton.addEventListener('click', () => {
         resetGameState();
-        initGame(); // Restart the game fully
+        initGame();
     });
     document.addEventListener('dragover', (e) => e.preventDefault());
     document.addEventListener('drop', (e) => e.preventDefault());
@@ -124,6 +134,7 @@ function handleDragStart(e) {
         e.preventDefault();
         return;
     }
+    elements.ball.classList.add('dragging');
     e.dataTransfer.setData('text/plain', state.currentCharacter.character);
 }
 
@@ -141,7 +152,7 @@ function handleAnswer(e, cell) {
         const newLevel = Math.floor(state.score / 100) + 1;
         if (newLevel > state.level) {
             state.level = newLevel;
-            state.timeLeft = Math.max(5, config.initialTime - (state.level * config.timeDecreasePerLevel)); // Adjust time for new level
+            state.timeLeft = Math.max(5, config.initialTime - (state.level * config.timeDecreasePerLevel));
             elements.message.textContent = `Level Up! Now level ${state.level}`;
         } else {
             elements.message.textContent = `Correct! +${config.baseScorePerCorrect * state.level} points`;
@@ -215,7 +226,7 @@ function endRound(success) {
     
     setTimeout(() => {
         if (state.gameActive) {
-            state.timeLeft = Math.max(5, config.initialTime - (state.level * config.timeDecreasePerLevel)); // Reset time for new round
+            state.timeLeft = Math.max(5, config.initialTime - (state.level * config.timeDecreasePerLevel));
             startNewRound();
         }
     }, success ? 1500 : 3000);
