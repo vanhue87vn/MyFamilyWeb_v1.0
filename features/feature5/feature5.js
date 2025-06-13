@@ -121,7 +121,7 @@ function startNewRound() {
     
     state.timer = setInterval(updateTimer, 100);
     elements.message.textContent = `Find: ${state.currentCharacter.character}`;
-    elements.message.style.color = '#2d3436';
+    elements.message.style.color = '#ffffff';
 }
 
 function getRandomCharacters(count) {
