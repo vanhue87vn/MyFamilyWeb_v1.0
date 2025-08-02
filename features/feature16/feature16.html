@@ -103,9 +103,9 @@
             y: 400,
             width: 40,
             height: 30,
-            velocity: -1,
-            gravity: 0.5,
-            jumpForce: -5,
+            velocity: -1000,
+            gravity: 0.15,
+            jumpForce: -2.5,
             color: '#f8d347'
         };
 
@@ -113,10 +113,10 @@
         let score = 0;
         let gameRunning = false;
         let animationFrameId;
-        let pipeGap = 150;
-        let pipeWidth = 60;
-        let pipeFrequency = 1500; // milliseconds
-        let lastPipeTime = 0;
+        let pipeGap = 120;
+        let pipeWidth = 100;
+        let pipeFrequency = 5000; // milliseconds
+        let lastPipeTime = 1;
         let groundHeight = 100;
         let scrollSpeed = 2;
 
