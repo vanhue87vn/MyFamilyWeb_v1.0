@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Flappy Bird</title>
+    <title>Flappy Bird (episode 1)</title>
     <style>
         body {
             margin: 0;
@@ -10,7 +10,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #70c5ce;
+            background-color: #82C8E5;
             font-family: Arial, sans-serif;
         }
         #game-container {
@@ -18,7 +18,7 @@
         }
         #game-canvas {
             border: 2px solid #333;
-            background-color: #70c5ce;
+            background-color: #82C8E5;
             display: block;
         }
         #score-display {
@@ -66,7 +66,7 @@
             margin-top: 10px;
         }
         button:hover {
-            background-color: #ffdf60;
+            background-color: #f2ff00;
         }
     </style>
 </head>
@@ -99,13 +99,13 @@
 
         // Game variables
         let bird = {
-            x: 100,
-            y: 400,
+            x: 50,
+            y: 300,
             width: 40,
-            height: 30,
-            velocity: -1000,
-            gravity: 0.15,
-            jumpForce: -2.5,
+            height: 40,
+            velocity: 0,
+            gravity: 0.5,
+            jumpForce: -15,
             color: '#f8d347'
         };
 
@@ -113,11 +113,11 @@
         let score = 0;
         let gameRunning = false;
         let animationFrameId;
-        let pipeGap = 120;
-        let pipeWidth = 100;
-        let pipeFrequency = 5000; // milliseconds
-        let lastPipeTime = 1;
-        let groundHeight = 100;
+        let pipeGap = 150;
+        let pipeWidth = 50;
+        let pipeFrequency = 3000; // milliseconds
+        let lastPipeTime = 0;
+        let groundHeight = 50;
         let scrollSpeed = 2;
 
         // Background elements
