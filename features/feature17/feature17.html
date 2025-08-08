@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JLPT Learning Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans JP', Arial, sans-serif;
+        }
+        .option {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .option:hover {
+            transform: scale(1.02);
+            background-color: #e0f7fa;
+        }
+        .correct {
+            background-color: #d1fae5 !important;
+            transform: scale(1.05);
+            border-color: #10b981 !important;
+        }
+        .correct::after {
+            content: '✔';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #10b981;
+            font-weight: bold;
+        }
+        .incorrect {
+            background-color: #fee2e2 !important;
+            transform: scale(1.05);
+            border-color: #ef4444 !important;
+        }
+        .incorrect::after {
+            content: '✘';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ef4444;
+            font-weight: bold;
+        }
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col items-center min-h-screen p-4">
+    <div class="container max-w-2xl bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-3xl font-bold text-center text-blue-800 mb-6">Japanese Learning Game</h1>
+        <p class="text-lg text-gray-700 mb-4 text-center">Test your Japanese skills! Choose a difficulty level and answer questions to earn points. Perfect for beginners, novices, and advanced learners.</p>
+
+        <!-- Level Selection -->
+        <div class="mb-8">
+            <h2 class="text-xl sm:text-2xl font-semibold text-blue-600 mb-4">Select JLPT Level</h2>
+            <div class="flex flex-wrap justify-center gap-3">
+                <button id="n6Btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">N6 (Absolute Beginner)</button>
+                <button id="n5Btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">N5 (Beginner)</button>
+                <button id="n4Btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">N4 (Novice)</button>
+                <button id="n3Btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">N3 (Novice)</button>
+                <button id="n2Btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">N2 (Advanced)</button>
+                <button id="n1Btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">N1 (Advanced)</button>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div id="gameArea" class="hidden">
+            <h2 id="levelTitle" class="text-2xl font-semibold text-blue-600 mb-4"></h2>
+            <p id="score" class="text-lg mb-4">Score: <span id="scoreValue">0</span></p>
+            <p id="question" class="text-xl mb-4"></p>
+            <div id="options" class="grid grid-cols-1 gap-2 mb-4"></div>
+            <p id="feedback" class="text-lg mb-4"></p>
+            <button id="nextBtn" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 hidden">Next Question</button>
+        </div>
+
+        <!-- Instructions -->
+        <div id="instructions" class="text-gray-700">
+            <p>Select a difficulty level to start the game. Answer questions to test your knowledge of hiragana, katakana, vocabulary, and kanji. Earn 10 points for each correct answer!</p>
+        </div>
+    </div>
+
+    <script>
+        const questions = {
+            n6: [
+                { question: "What is the hiragana for 'a'?", options: ["あ", "い", "う", "え"], answer: "あ" },
+                { question: "What does ありがとう mean?", options: ["Hello", "Thank you", "Goodbye", "Please"], answer: "Thank you" },
+                { question: "What is the katakana for 'ko'?", options: ["コ", "カ", "キ", "ケ"], answer: "コ" },
+                { question: "Translate: ねこ", options: ["Dog", "Cat", "Fish", "Bird"], answer: "Cat" },
+                { question: "What particle marks the topic?", options: ["を", "は", "が", "に"], answer: "は" }
+            ],
+            n5: [
+                { question: "What is the kanji for 'sun'?", options: ["日", "月", "火", "水"], answer: "日" },
+                { question: "Conjugate 食べる to polite past tense", options: ["食べました", "食べます", "食べる", "食べない"], answer: "食べました" },
+                { question: "What does 学校 mean?", options: ["House", "School", "Store", "Park"], answer: "School" },
+                { question: "What is the plain form of 行きます?", options: ["行く", "行った", "行かない", "行き"], answer: "行く" },
+                { question: "What does お元気ですか mean?", options: ["How much?", "How are you?", "Where are you?", "What time is it?"], answer: "How are you?" }
+            ],
+            n4: [
+                { question: "What is the kanji for 'economy'?", options: ["経済", "環境", "政治", "社会"], answer: "経済" },
+                { question: "Humble form of する?", options: ["いたします", "します", "なさる", "おする"], answer: "いたします" },
+                { question: "Honorific form of 行く?", options: ["いらっしゃる", "行く", "お行き", "行きます"], answer: "いらっしゃる" },
+                { question: "What does 環境 mean?", options: ["Environment", "Economy", "Politics", "Society"], answer: "Environment" },
+                { question: "Translate: 会議に出席する", options: ["Attend a meeting", "Cancel a meeting", "Plan a meeting", "End a meeting"], answer: "Attend a meeting" }
+            ],
+            n3: [
+                { question: "What is the kanji for 'culture'?", options: ["文化", "教育", "社会", "歴史"], answer: "文化" },
+                { question: "What does 経済学 mean?", options: ["Economics", "Politics", "History", "Culture"], answer: "Economics" },
+                { question: "What is the polite form of 見る?", options: ["見ます", "見ました", "見る", "見ない"], answer: "見ます" },
+                { question: "What does 知識 mean?", options: ["Knowledge", "Wisdom", "Information", "Data"], answer: "Knowledge" },
+                { question: "Translate: 彼は日本に住んでいます", options: ["He lives in Japan", "He studies in Japan", "He works in Japan", "He travels to Japan"], answer: "He lives in Japan" }
+            ],
+            n2: [
+                { question: "What is the kanji for 'government'?", options: ["政府", "政治", "法律", "経済"], answer: "政府" },
+                { question: "What does 統計 mean?", options: ["Statistics", "Economy", "Politics", "Culture"], answer: "Statistics" },
+                { question: "What is the plain form of 話します?", options: ["話す", "話した", "話さない", "話している"], answer: "話す" },
+                { question: "Translate: 彼女は医者ですか？", options: ["Is she a doctor?", "Is she a teacher?", "Is she a student?", "Is she a nurse?"], answer: "Is she a doctor?" },
+                { question: "What does 環境保護 mean?", options: ["Environmental protection", "Economic growth", "Political stability", "Cultural exchange"], answer: "Environmental protection" }
+            ],
+            n1: [
+                { question: "What is the kanji for 'philosophy'?", options: ["哲学", "科学", "文学", "歴史"], answer: "哲学" },
+                { question: "What does 国際関係 mean?", options: ["International relations", "Domestic affairs", "Cultural exchange", "Economic policy"], answer: "International relations" },
+                { question: "What is the polite form of 読む?", options: ["読みます", "読んだ", "読む", "読まない"], answer: "読みます" },
+                { question: "Translate: 彼は文学を専攻しています", options: ["He majors in literature", "He studies economics", "He works in politics", "He teaches history"], answer: "He majors in literature" },
+                { question: "What does 社会科学 mean?", options: ["Social sciences", "Natural sciences", "Formal sciences", "Applied sciences"], answer: "Social sciences" }
+            ]
+        };
+
+        let currentLevel = null;
+        let currentQuestion = 0;
+        let score = 0;
+
+        const levelTitle = document.getElementById('levelTitle');
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const feedbackEl = document.getElementById('feedback');
+        const scoreValueEl = document.getElementById('scoreValue');
+        const nextBtn = document.getElementById('nextBtn');
+        const gameArea = document.getElementById('gameArea');
+        const instructions = document.getElementById('instructions');
+
+        document.getElementById('N6Btn').addEventListener('click', () => startGame('N6'));
+        document.getElementById('N5Btn').addEventListener('click', () => startGame('N5'));
+        document.getElementById('N4Btn').addEventListener('click', () => startGame('N4'));
+        document.getElementById('N3Btn').addEventListener('click', () => startGame('N3'));
+        document.getElementById('N2Btn').addEventListener('click', () => startGame('N2'));
+        document.getElementById('N1Btn').addEventListener('click', () => startGame('N1'));
+        nextBtn.addEventListener('click', loadNextQuestion);
+
+        function startGame(level, title) {
+            try {
+                currentLevel = level;
+                currentQuestion = 0;
+                score = 0;
+                scoreValueEl.textContent = score;
+                gameArea.classList.remove('hidden');
+                instructions.classList.add('hidden');
+                levelTitle.textContent = title;
+                totalQuestionsEl.textContent = questions[level].length;
+                restartBtn.classList.remove('hidden');
+                loadQuestion();
+            } catch (e) {
+                console.error('Error starting game:', e);
+                feedbackEl.textContent = 'An error occurred. Please check the console and try again.';
+            }
+        }
+
+        function loadQuestion() {
+            const q = questions[currentLevel][currentQuestion];
+            questionEl.textContent = q.question;
+            optionsEl.innerHTML = '';
+            feedbackEl.textContent = '';
+            nextBtn.classList.add('hidden');
+            progressValueEl.textContent = currentQuestion + 1;
+            progressBar.style.width = `${((currentQuestion + 1) / questions[currentLevel].length) * 100}%`;
+
+            q.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.textContent = option;
+                btn.classList.add('option', 'px-4', 'py-3', 'bg-gray-100', 'rounded-lg', 'text-left', 'border', 'border-gray-300', 'w-full', 'text-sm', 'sm:text-base');
+                btn.addEventListener('click', () => checkAnswer(option, q.answer));
+                optionsEl.appendChild(btn);
+            });
+
+            startTimer();
+        }
+
+        function startTimer() {
+            let timeLeft = timeLimit;
+            timerBar.style.width = '100%';
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft -= 0.1;
+                timerBar.style.width = `${(timeLeft / timeLimit) * 100}%`;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    checkAnswer(null, questions[currentLevel][currentQuestion].answer);
+                }
+            }, 100);
+        }
+
+        function playSound(type) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = ctx.createOscillator();
+                const gainNode = ctx.createGain();
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(type === 'correct' ? 800 : 400, ctx.currentTime);
+                gainNode.gain.setValueAtTime(0.2, ctx.currentTime); // Reduced volume to 20%
+                oscillator.connect(gainNode);
+                gainNode.connect(ctx.destination);
+                oscillator.start();
+                oscillator.stop(ctx.currentTime + 0.3);
+            } catch (e) {
+                console.warn('Audio playback failed:', e);
+            }
+        }
+
+        function checkAnswer(selected, correct) {
+            clearInterval(timer);
+            const buttons = optionsEl.querySelectorAll('.option');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === correct) {
+                    btn.classList.add('correct');
+                }
+                if (btn.textContent === selected && selected !== correct) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            if (selected === correct) {
+                score += 10;
+                scoreValueEl.textContent = score;
+                feedbackEl.textContent = 'Correct! 🎉';
+                feedbackEl.classList.add('text-green-600');
+                playSound('correct');
+            } else {
+                feedbackEl.textContent = `Incorrect. The answer is "${correct}".`;
+                feedbackEl.classList.add('text-red-600');
+                playSound('incorrect');
+            }
+
+            nextBtn.classList.remove('hidden');
+        }
+
+        function loadNextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions[currentLevel].length) {
+                loadQuestion();
+            } else {
+                clearInterval(timer);
+                questionEl.textContent = 'Game Over!';
+                optionsEl.innerHTML = '';
+                feedbackEl.textContent = `Final Score: ${score}. Play again by selecting a level or restarting!`;
+                nextBtn.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
