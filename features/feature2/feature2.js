@@ -20,7 +20,7 @@ let touchStartY = 0;
 
 // ================ Mobile Support ================
 function setupMobileControls() {
-    if (!('ontouchstart' in window)) return;
+if (!('ontouchstart' in window)) return;
     
     const controlContainer = document.createElement('div');
     controlContainer.id = 'mobile-controls';
@@ -38,26 +38,41 @@ function setupMobileControls() {
         z-index: 100;
     `;
 
-    const createButton = (text, area) => {
-        const btn = document.createElement('button');
-        btn.textContent = text;
-        btn.style.cssText = `
-            grid-area: ${area};
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            font-size: 24px;
-            background: rgba(255,255,255,0.7);
-            border: 2px solid #333;
-            touch-action: manipulation;
-        `;
-        return btn;
-    };
+const createButton = (text, area) => {
+    const btn = document.createElement('button');
+    btn.textContent = text;
+    btn.style.cssText = `
+        grid-area: ${area};
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        font-size: 24px;
+        background: rgba(255,255,255,0.8);
+        border: 2px solid #333;
+        touch-action: manipulation;
+    `;
+    return btn;
+};
 
-    const upBtn = createButton('↑', 'up');
-    const leftBtn = createButton('←', 'left');
-    const rightBtn = createButton('→', 'right');
-    const downBtn = createButton('↓', 'down');
+// Create mobile control buttons using JS
+const upBtn = createButton('↑', 'up');
+const leftBtn = createButton('←', 'left');
+const rightBtn = createButton('→', 'right');
+const downBtn = createButton('↓', 'down');
+
+controlContainer.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-areas: 
+        ". up ."
+        "left . right"
+        ". down .";
+    gap: 10px;
+    z-index: 100;
+`;
 
     // Add touch/click events
     [upBtn, leftBtn, rightBtn, downBtn].forEach((btn, i) => {
@@ -123,27 +138,8 @@ function draw() {
     snake.forEach((segment, index) => {
         ctx.fillStyle = index === 0 ? '#4CAF50' : '#8BC34A';
         ctx.fillRect(segment.x, segment.y, box-1, box-1);
-        
-        // Draw eyes on head
-        if (index === 0) {
-            ctx.fillStyle = 'white';
-            const eyeSize = box / 5;
-            if (direction === 'RIGHT' || direction === null) {
-                ctx.fillRect(segment.x + box - eyeSize*2, segment.y + eyeSize, eyeSize, eyeSize);
-                ctx.fillRect(segment.x + box - eyeSize*2, segment.y + box - eyeSize*2, eyeSize, eyeSize);
-            } else if (direction === 'LEFT') {
-                ctx.fillRect(segment.x + eyeSize, segment.y + eyeSize, eyeSize, eyeSize);
-                ctx.fillRect(segment.x + eyeSize, segment.y + box - eyeSize*2, eyeSize, eyeSize);
-            } else if (direction === 'UP') {
-                ctx.fillRect(segment.x + eyeSize, segment.y + eyeSize, eyeSize, eyeSize);
-                ctx.fillRect(segment.x + box - eyeSize*2, segment.y + eyeSize, eyeSize, eyeSize);
-            } else if (direction === 'DOWN') {
-                ctx.fillRect(segment.x + eyeSize, segment.y + box - eyeSize*2, eyeSize, eyeSize);
-                ctx.fillRect(segment.x + box - eyeSize*2, segment.y + box - eyeSize*2, eyeSize, eyeSize);
-            }
-        }
     });
-    
+
     // Draw food
     ctx.fillStyle = 'red';
     ctx.beginPath();
@@ -165,7 +161,7 @@ function restartGame() {
     nextDirection = null;
     score = 0;
     scoreDisplay.textContent = '0';
-    gameSpeed = 300;
+    gameSpeed = 100;
     gameActive = true;
     gameOverScreen.style.display = 'none';
     
@@ -224,16 +220,13 @@ function gameLoop() {
 // ================ Event Listeners ================
 document.addEventListener('keydown', (e) => {
     if (!gameActive) return;
-    
     if (e.key === 'ArrowUp' && direction !== 'DOWN') nextDirection = 'UP';
     if (e.key === 'ArrowDown' && direction !== 'UP') nextDirection = 'DOWN';
     if (e.key === 'ArrowLeft' && direction !== 'RIGHT') nextDirection = 'LEFT';
     if (e.key === 'ArrowRight' && direction !== 'LEFT') nextDirection = 'RIGHT';
-    if (e.key === 'r' || e.key === 'R') {
-        e.preventDefault();
-        restartGame();
-    }
 });
+
+// (Removed invalid HTML block. Mobile controls are created dynamically in setupMobileControls().)
 
 // Hàm debounce để tránh resize liên tục
 function debounce(func, wait) {
@@ -250,25 +243,15 @@ function debounce(func, wait) {
 // ================ Initialize Game ================
 function initGame() {
     // Setup responsive canvas
-    function resizeCanvas() {
-        const gameContainer = document.getElementById('game-container') || document.body;
-        const containerWidth = gameContainer.clientWidth;
-        const canvasSize = Math.min(containerWidth, 300); // Giới hạn tối đa 500px
-        
-        // Đặt kích thước canvas (tính bằng pixel)
-        canvas.width = canvasSize;
-        canvas.height = canvasSize;
-        
-        // Đặt lại box size dựa trên kích thước mới
-        box = Math.max(15, Math.floor(canvasSize / 25)); // Đảm bảo box không quá nhỏ
-        
-        // Reset game state nếu đang chạy
-        if (gameActive) {
-            const startPos = Math.floor((canvasSize / box) / 2) * box;
-            snake = [{x: startPos, y: startPos}];
-            food = generateFood();
-        }
-    }
+function resizeCanvas() {
+    const gameContainer = document.getElementById('game-container') || document.body;
+    const containerWidth = gameContainer.clientWidth;
+    const canvasSize = Math.min(containerWidth, 300);
+    
+    canvas.width = canvasSize;
+    canvas.height = canvasSize;
+    box = Math.max(15, Math.floor(canvasSize / 25));
+}
     
     // Thực hiện resize ngay lần đầu
     resizeCanvas();

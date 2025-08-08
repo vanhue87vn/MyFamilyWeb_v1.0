@@ -58,8 +58,19 @@ h2 {
 }
 
 /* Ngăn zoom trên mobile */
-html {
-    touch-action: manipulation;
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+canvas {
+    touch-action: none;
+}
+#mobile-controls button {
+    font-weight: bold;
 }
 
 #gameOver {
@@ -96,4 +107,22 @@ html {
 
 #gameOver button:hover {
     background-color: #45a049;
+}
+#mobile-controls {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+}
+
+#mobile-controls button {
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 20px;
+    margin: 5px;
+    border-radius: 8px;
 }
