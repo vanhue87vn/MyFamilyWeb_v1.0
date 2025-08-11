@@ -2,23 +2,23 @@
 // GAME CONSTANTS
 // ======================
 const DIFFICULTY = {
-  INITIAL_BALL_SPEED: 5,
-  SPEED_INCREASE_PER_LEVEL: 3,
-  BRICK_DURABILITY: 10,
-  GRAVITY: 0.35,
-  BOUNCE_DECAY: 0.98,
-  TIME_LIMIT: 300, // 300 seconds
+  INITIAL_BALL_SPEED: 7,
+  SPEED_INCREASE_PER_LEVEL: 20,
+  BRICK_DURABILITY: 5,
+  GRAVITY: 0.1,
+  BOUNCE_DECAY: 1,
+  TIME_LIMIT: 100, // 100 seconds
   TIME_DECREASE_PER_LEVEL: 5,
   BALL_GROWTH_PER_LEVEL: 0.5,
   RANDOM_TELEPORT_CHANCE: 0.01,
-  SPEED_MULTIPLIER: 2.9, // Speed multiplier for speed-up bricks
+  SPEED_MULTIPLIER: 10, // Speed multiplier for speed-up bricks
   PADDLE_SHRINK_PER_SECOND: 0.75, // Paddle shrinks by 0.75 pixels per second
-  TIMER_WARNING_THRESHOLD: 60, // 60 seconds
-  COMBO_THRESHOLD: 3, // Combo starts at 3 hits
-  COMBO_DECAY_TIME: 5000, // 5 seconds
-  POWER_UP_CHANCE: 0.5, // 50% chance for power-up drop
-  POWER_UP_SPEED: 5, // Speed of power-ups falling
-  SCREEN_SHAKE_DURATION: 1000 // 1 second
+  TIMER_WARNING_THRESHOLD: 10, // 10 seconds
+  COMBO_THRESHOLD: 2, // Combo starts at 2 hits
+  COMBO_DECAY_TIME: 1, // 1 millisecond
+  POWER_UP_CHANCE: 1, // 100% chance for power-up drop
+  POWER_UP_SPEED: 2, // Speed of power-ups falling
+  SCREEN_SHAKE_DURATION: 3600000 // 1 hour
 };
 
 // Power-up types
@@ -34,7 +34,7 @@ const POWER_UPS = {
 // ======================
 let gameRunning = false;
 let score = 0;
-let lives = 1;
+let lives = 3;
 let level = 1;
 let timeLeft = DIFFICULTY.TIME_LIMIT;
 let animationId;
@@ -140,7 +140,6 @@ class Brick {
     this.maxDurability = durability;
     this.color = `hsl(${Math.random() * 60}, 100%, 50%)`;
     this.isSpecial = isSpecial;
-    this.isReverse = isReverse;
     this.isSpeedUp = isSpeedUp;
   }
 
