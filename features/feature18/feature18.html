@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luyện Tập Gõ Phím</title>
+    <link rel="stylesheet" href="feature18.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Luyện Tập Gõ Phím</h1>
+        <div class="game-area">
+            <div id="level-selection">
+                <label>Chọn cấp độ:</label>
+                <select id="level">
+                    <option value="easy">Dễ</option>
+                    <option value="medium">Trung bình</option>
+                    <option value="hard">Khó</option>
+                </select>
+                <button id="start-btn">Bắt đầu</button>
+            </div>
+            <div id="game" style="display: none;">
+                <div id="word-display"></div>
+                <input type="text" id="user-input" placeholder="Gõ từ ở đây..." autocomplete="off">
+                <div id="stats">
+                    <p>Điểm: <span id="score">0</span></p>
+                    <p>Thời gian còn lại: <span id="time">0</span>s</p>
+                    <p>Độ chính xác: <span id="accuracy">100%</span></p>
+                </div>
+            </div>
+            <div id="result" style="display: none;">
+                <h2>Kết quả</h2>
+                <p>Điểm: <span id="final-score"></span></p>
+                <p>Độ chính xác: <span id="final-accuracy"></span></p>
+                <button id="restart-btn">Chơi lại</button>
+            </div>
+        </div>
+    </div>
+    <!-- Liên kết đến JavaScript chính và feature -->
+    <script src="../../js/utils/helpers.js"></script>
+    <script src="../../js/app.js"></script>
+    <script src="feature18.js"></script>
+</body>
+</html>
