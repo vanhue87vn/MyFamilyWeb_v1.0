@@ -270,5 +270,4 @@
         document.getElementById('next-btn').style.display = 'block'; // Show next button for demonstration
         document.getElementById('restart-btn').style.display = 'block'; // Show restart button for demonstration
         document.getElementById('next-btn').addEventListener('click', function() {
-            alert('Next question logic goes here!');
         });
