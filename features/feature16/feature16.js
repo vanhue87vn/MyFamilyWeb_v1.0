@@ -146,7 +146,6 @@
             if (currentQuestion < questions[currentLevel].length) {
                 loadQuestion();
             } else {
-                clearInterval(timer);
                 questionEl.textContent = 'Game Over!';
                 optionsEl.innerHTML = '';
                 feedbackEl.textContent = `Final Score: ${score}. Play again by selecting a level or restarting!`;

@@ -6,7 +6,9 @@
         }
         
         function appendToDisplay(value) {
-            if (currentDisplay === '0' && value !== '.') {
+            if (currentDisplay === 'Error') {
+                currentDisplay = value === '.' ? '0.' : value;
+            } else if (currentDisplay === '0' && value !== '.') {
                 currentDisplay = value;
             } else {
                 currentDisplay += value;
@@ -80,10 +82,13 @@ function toggleSign() {
     // If last character is an operator, don't toggle
     if (/[+\-*/]$/.test(currentDisplay)) return;
     
-    // Toggle sign of the last number
-    const parts = currentDisplay.split(/([+\-*/])/);
-    const lastNum = parts.pop();
-    parts.push(lastNum.startsWith('(-') ? lastNum.slice(2) : '(-' + lastNum);
-    currentDisplay = parts.join('');
+    const match = currentDisplay.match(/(\(-?(?:\d+\.?\d*|\.\d+)\)|-?(?:\d+\.?\d*|\.\d+))$/);
+    if (!match) return;
+
+    const value = match[0];
+    const nextValue = value.startsWith('(-') && value.endsWith(')')
+        ? value.slice(2, -1)
+        : `(-${value.startsWith('-') ? value.slice(1) : value})`;
+    currentDisplay = currentDisplay.slice(0, -value.length) + nextValue;
     updateDisplay();
 }
