@@ -1,4 +1,4 @@
-// feature11.js
+// feature10.js
 document.addEventListener('DOMContentLoaded', function() {
     // Lấy dữ liệu từ file JSON
     fetch('../../data/JSON/alphabet-basic.json')
