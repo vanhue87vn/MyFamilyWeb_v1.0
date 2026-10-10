@@ -1,6 +1,6 @@
 (() => {
     const volumeMaximum = 5.0;
-    const defaultVolume = 5.0;
+    const defaultVolume = 2.3;
     const stylesheet = document.createElement('link');
     stylesheet.rel = 'stylesheet';
     stylesheet.href = new URL('../css/site-music.css', document.currentScript.src).href;
