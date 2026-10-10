@@ -7,6 +7,8 @@
     #gameCanvas {
         display: block;
         background-color: #222;
+        touch-action: none;
+        cursor: crosshair;
     }
     #score {
         position: fixed;
@@ -65,4 +67,7 @@
     }
     #instructions button:hover {
         background: #216894;
+    }
+    @media (max-height: 520px) {
+        #instructions { max-height: calc(100dvh - 24px); overflow-y: auto; }
     }

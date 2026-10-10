@@ -50,6 +50,9 @@
             dy: 0,
             speed: 5
         };
+        let pointerControlActive = false;
+        let targetX = player.x;
+        let targetY = player.y;
         
         // Obstacles
         let obstacles = [];
@@ -69,6 +72,7 @@
         // Event listeners
         window.addEventListener('keydown', (e) => {
             if (keys.hasOwnProperty(e.key)) {
+                pointerControlActive = false;
                 keys[e.key] = true;
             }
         });
@@ -82,11 +86,24 @@
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            targetX = Math.min(canvas.width - player.radius, Math.max(player.radius, targetX));
+            targetY = Math.min(canvas.height - player.radius, Math.max(player.radius, targetY));
         });
+
+        function updatePointerTarget(event) {
+            const bounds = canvas.getBoundingClientRect();
+            targetX = (event.clientX - bounds.left) * (canvas.width / bounds.width);
+            targetY = (event.clientY - bounds.top) * (canvas.height / bounds.height);
+            targetX = Math.max(player.radius, Math.min(canvas.width - player.radius, targetX));
+            targetY = Math.max(player.radius, Math.min(canvas.height - player.radius, targetY));
+            pointerControlActive = true;
+        }
+
+        canvas.addEventListener('pointerdown', updatePointerTarget);
+        canvas.addEventListener('pointermove', updatePointerTarget);
         
         tierSelectElement.addEventListener('change', updateTierDescription);
         startButtonElement.addEventListener('click', startGame);
-
         function updateTierDescription() {
             const tier = Number(tierSelectElement.value);
             tierDescriptionElement.textContent = `Tier ${tier}: ${tierDefinitions[tier].summary} obstacles.`;
@@ -99,6 +116,9 @@
             selectedTier = Number(tierSelectElement.value);
             player.x = canvas.width / 2;
             player.y = canvas.height / 2;
+            targetX = player.x;
+            targetY = player.y;
+            pointerControlActive = false;
             obstacles = [];
             instructionsElement.style.display = 'none';
             scoreElement.textContent = 'Score: 0';
@@ -146,20 +166,30 @@
         }
         
         function updatePlayer() {
-            // Reset movement
             player.dx = 0;
             player.dy = 0;
+
+            if (pointerControlActive) {
+                const dx = targetX - player.x;
+                const dy = targetY - player.y;
+                const distance = Math.hypot(dx, dy);
+                if (distance > player.speed) {
+                    player.dx = dx / distance * player.speed;
+                    player.dy = dy / distance * player.speed;
+                } else {
+                    player.dx = dx;
+                    player.dy = dy;
+                }
+            } else {
+                if (keys.ArrowUp || keys.w) player.dy = -player.speed;
+                if (keys.ArrowDown || keys.s) player.dy = player.speed;
+                if (keys.ArrowLeft || keys.a) player.dx = -player.speed;
+                if (keys.ArrowRight || keys.d) player.dx = player.speed;
             
-            // Handle key presses
-            if (keys.ArrowUp || keys.w) player.dy = -player.speed;
-            if (keys.ArrowDown || keys.s) player.dy = player.speed;
-            if (keys.ArrowLeft || keys.a) player.dx = -player.speed;
-            if (keys.ArrowRight || keys.d) player.dx = player.speed;
-            
-            // Normalize diagonal movement
-            if (player.dx !== 0 && player.dy !== 0) {
-                player.dx *= 0.7071;
-                player.dy *= 0.7071;
+                if (player.dx !== 0 && player.dy !== 0) {
+                    player.dx *= 0.7071;
+                    player.dy *= 0.7071;
+                }
             }
             
             // Update position with bounds checking

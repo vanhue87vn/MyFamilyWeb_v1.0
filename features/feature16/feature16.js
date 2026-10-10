@@ -115,7 +115,6 @@
         }
 
         function checkAnswer(selected, correct) {
-            clearInterval(timer);
             const buttons = optionsEl.querySelectorAll('.option');
             buttons.forEach(btn => {
                 btn.disabled = true;

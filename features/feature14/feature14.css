@@ -4,7 +4,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          height: 100vh;
+          height: 100dvh;
           background-color: #000;
           font-family: Arial, sans-serif;
           overflow: hidden;
@@ -21,6 +21,11 @@
           background: radial-gradient(ellipse at center, #111 0%, #000 100%);
           border: 4px solid #f00;
           box-shadow: 0 0 30px #f00;
+          display: block;
+          width: min(800px, calc(100vw - 24px), calc(133.333dvh - 32px));
+          height: auto;
+          aspect-ratio: 4 / 3;
+          touch-action: none;
         }
 
         #gameUI {
@@ -87,6 +92,14 @@
           font-size: 24px;
           margin-top: 10px;
           animation: pulse 0.5s infinite alternate;
+        }
+        @media (max-width: 600px) {
+          #gameContainer { max-width: calc(100vw - 24px); }
+          #gameUI { top: 8px; left: 8px; right: 8px; font-size: 13px; }
+          #comboDisplay { top: 44px; left: 8px; font-size: 13px; }
+          #startScreen h1, #gameOverScreen h1 { font-size: clamp(24px, 8vw, 38px) !important; }
+          #startScreen p, #gameOverScreen p { margin: 8px; font-size: 14px !important; }
+          #startButton, #restartButton { max-width: 100%; padding: 12px 14px !important; font-size: 16px !important; }
         }
 
         @keyframes pulse {

@@ -672,7 +672,7 @@ function movePaddle(e) {
   if (!gameRunning) return;
 
   const rect = canvas.getBoundingClientRect();
-  let relativeX = e.clientX - rect.left;
+  let relativeX = (e.clientX - rect.left) * (canvas.width / rect.width);
 
   if (paddleControlReversed) {
     relativeX = canvas.width - relativeX;
@@ -798,7 +798,8 @@ function startGame() {
 // ======================
 // EVENT LISTENERS
 // ======================
-canvas.addEventListener('mousemove', movePaddle);
+canvas.addEventListener('pointerdown', movePaddle);
+canvas.addEventListener('pointermove', movePaddle);
 startButton.addEventListener('click', startGame);
 restartButton.addEventListener('click', startGame);
 
