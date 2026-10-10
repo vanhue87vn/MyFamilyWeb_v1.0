@@ -1,7 +1,13 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const scoreElement = document.getElementById('score');
+        const difficultyElement = document.getElementById('difficulty');
         const instructionsElement = document.getElementById('instructions');
+        const tierSelectElement = document.getElementById('tier-select');
+        const tierDescriptionElement = document.getElementById('tier-description');
+        const gameTitleElement = document.getElementById('game-title');
+        const gameMessageElement = document.getElementById('game-message');
+        const startButtonElement = document.getElementById('start-button');
         
         // Set canvas size
         canvas.width = window.innerWidth;
@@ -11,6 +17,28 @@
         let gameRunning = false;
         let score = 0;
         let speed = 3;
+        let selectedTier = 1;
+
+        const obstacleProfiles = {
+            veryEasy: { minRadius: 10, maxRadius: 16, speedMultiplier: 0.5, color: '#2ecc71' },
+            easy: { minRadius: 14, maxRadius: 21, speedMultiplier: 0.72, color: '#55c7d9' },
+            medium: { minRadius: 18, maxRadius: 27, speedMultiplier: 1, color: '#f1c40f' },
+            hard: { minRadius: 19, maxRadius: 29, speedMultiplier: 1.3, color: '#e67e22' },
+            expert: { minRadius: 15, maxRadius: 25, speedMultiplier: 1.65, color: '#e74c3c' }
+        };
+
+        const tierDefinitions = {
+            1: { summary: '100% very easy', distribution: [['veryEasy', 1]] },
+            2: { summary: '100% easy', distribution: [['easy', 1]] },
+            3: { summary: '50% easy, 50% medium', distribution: [['easy', 0.5], ['medium', 0.5]] },
+            4: { summary: '25% easy, 75% medium', distribution: [['easy', 0.25], ['medium', 0.75]] },
+            5: { summary: '100% medium', distribution: [['medium', 1]] },
+            6: { summary: '50% medium, 50% hard', distribution: [['medium', 0.5], ['hard', 0.5]] },
+            7: { summary: '25% medium, 75% hard', distribution: [['medium', 0.25], ['hard', 0.75]] },
+            8: { summary: '100% hard', distribution: [['hard', 1]] },
+            9: { summary: '50% hard, 50% expert', distribution: [['hard', 0.5], ['expert', 0.5]] },
+            10: { summary: '100% expert', distribution: [['expert', 1]] }
+        };
         
         // Player ball
         const player = {
@@ -56,26 +84,43 @@
             canvas.height = window.innerHeight;
         });
         
-        canvas.addEventListener('click', () => {
-            if (!gameRunning) {
-                startGame();
-            }
-        });
+        tierSelectElement.addEventListener('change', updateTierDescription);
+        startButtonElement.addEventListener('click', startGame);
+
+        function updateTierDescription() {
+            const tier = Number(tierSelectElement.value);
+            tierDescriptionElement.textContent = `Tier ${tier}: ${tierDefinitions[tier].summary} obstacles.`;
+        }
         
         function startGame() {
             gameRunning = true;
             score = 0;
             speed = 3;
+            selectedTier = Number(tierSelectElement.value);
             player.x = canvas.width / 2;
             player.y = canvas.height / 2;
             obstacles = [];
             instructionsElement.style.display = 'none';
             scoreElement.textContent = 'Score: 0';
+            difficultyElement.textContent = `Tier ${selectedTier}: ${tierDefinitions[selectedTier].summary}`;
             animate();
         }
         
         function createObstacle() {
-            const size = Math.random() * 30 + 20;
+            const distribution = tierDefinitions[selectedTier].distribution;
+            const roll = Math.random();
+            let cumulativeProbability = 0;
+            let profile = obstacleProfiles[distribution[distribution.length - 1][0]];
+
+            for (const [profileName, probability] of distribution) {
+                cumulativeProbability += probability;
+                if (roll < cumulativeProbability) {
+                    profile = obstacleProfiles[profileName];
+                    break;
+                }
+            }
+
+            const size = Math.random() * (profile.maxRadius - profile.minRadius) + profile.minRadius;
             let x, y;
             
             // Place obstacle outside canvas
@@ -86,14 +131,17 @@
                 x = Math.random() * canvas.width;
                 y = Math.random() < 0.5 ? -size : canvas.height + size;
             }
+
+            const targetX = canvas.width * (0.2 + Math.random() * 0.6);
+            const targetY = canvas.height * (0.2 + Math.random() * 0.6);
             
             obstacles.push({
                 x: x,
                 y: y,
                 radius: size,
-                color: '#e74c3c',
-                dx: (canvas.width/2 - x) / 100 * speed,
-                dy: (canvas.height/2 - y) / 100 * speed
+                color: profile.color,
+                dx: (targetX - x) / 100 * speed * profile.speedMultiplier,
+                dy: (targetY - y) / 100 * speed * profile.speedMultiplier
             });
         }
         
@@ -120,8 +168,9 @@
         }
         
         function updateObstacles() {
-            // Create new obstacles occasionally
-            if (Math.random() < 0.02) {
+            const spawnChance = 0.008 + selectedTier * 0.0012;
+
+            if (Math.random() < spawnChance) {
                 createObstacle();
             }
             
@@ -138,10 +187,6 @@
                     score++;
                     scoreElement.textContent = `Score: ${score}`;
                     
-                    // Increase difficulty
-                    if (score % 5 === 0) {
-                        speed += 0.2;
-                    }
                 }
                 
                 // Check collision with player
@@ -157,11 +202,9 @@
         
         function gameOver() {
             gameRunning = false;
-            instructionsElement.innerHTML = `
-                <h2>Game Over</h2>
-                <p>Your score: ${score}</p>
-                <p>Click to play again</p>
-            `;
+            gameTitleElement.textContent = 'Game Over';
+            gameMessageElement.textContent = `Your score: ${score}. Choose a tier and play again.`;
+            startButtonElement.textContent = 'Play again';
             instructionsElement.style.display = 'block';
         }
         
