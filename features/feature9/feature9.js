@@ -1,46 +1,65 @@
-        // Conversation context
-        let lastTopic = null;
-        
+        const state = {
+            lastTopic: null,
+            memory: {
+                name: null
+            }
+        };
+
+        function normalizeText(input) {
+            return String(input || '').trim().toLowerCase();
+        }
+
+        function classifyIntent(message) {
+            const text = normalizeText(message);
+            if (/\b(hi|hello|hey|good morning|good evening|sup)\b/.test(text)) return 'greeting';
+            if (/\b(what can you do|who are you|help|assistant)\b/.test(text)) return 'help';
+            if (/\b(math|calculate|plus|minus|times|divide|sum|total|equation|add|subtract|multiply)\b/.test(text) || /\d\s*[+*/-]\s*\d/.test(text)) return 'math';
+            if (/\b(study|learn|teach|japanese|hiragana|katakana|lesson|quiz|language|vocab)\b/.test(text)) return 'study';
+            if (/\b(tech|computer|wifi|internet|printer|phone|software|device|bug|error)\b/.test(text)) return 'tech';
+            if (/\b(recommend|book|movie|suggest|watch|read|pick)\b/.test(text)) return 'recommendation';
+            if (/\b(joke|funny|laugh|humor|haha)\b/.test(text)) return 'joke';
+            if (/\b(time|date|today|day|clock)\b/.test(text)) return 'time';
+            if (/\b(bye|goodbye|later|see you|thanks|thank you)\b/.test(text)) return 'goodbye';
+            return 'general';
+        }
+
         document.getElementById('send-button').addEventListener('click', sendMessage);
-        document.getElementById('user-input').addEventListener('keypress', function(e) {
+        document.getElementById('user-input').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 sendMessage();
             }
         });
 
         function quickQuestion(question) {
-            document.getElementById('user-input').value = question;
+            const input = document.getElementById('user-input');
+            input.value = question;
             sendMessage();
         }
 
         function sendMessage() {
             const userInput = document.getElementById('user-input');
             const message = userInput.value.trim();
-            
-            if (message) {
-                addMessage(message, 'user-message');
-                userInput.value = '';
-                
-                setTimeout(() => {
-                    const botResponse = getBotResponse(message);
-                    addMessage(botResponse.text, 'bot-message');
-                    
-                    // Add suggestions if provided
-                    if (botResponse.suggestions) {
-                        const suggestionsDiv = document.createElement('div');
-                        suggestionsDiv.className = 'suggestions';
-                        
-                        botResponse.suggestions.forEach(suggestion => {
-                            const suggestionElement = document.createElement('div');
-                            suggestionElement.className = 'suggestion';
-                            suggestionElement.textContent = suggestion;
-                            suggestionElement.onclick = () => quickQuestion(suggestion);
-                            suggestionsDiv.appendChild(suggestionElement);
-                        });
-                        
-                        document.getElementById('chat-messages').lastChild.appendChild(suggestionsDiv);
-                    }
-                }, 500);
+
+            if (!message) {
+                return;
+            }
+
+            addMessage(message, 'user-message');
+            userInput.value = '';
+            const botResponse = getBotResponse(message);
+            addMessage(botResponse.text, 'bot-message');
+
+            if (botResponse.suggestions.length) {
+                const suggestionsDiv = document.createElement('div');
+                suggestionsDiv.className = 'suggestions';
+                botResponse.suggestions.forEach((suggestion) => {
+                    const suggestionElement = document.createElement('div');
+                    suggestionElement.className = 'suggestion';
+                    suggestionElement.textContent = suggestion;
+                    suggestionElement.addEventListener('click', () => quickQuestion(suggestion));
+                    suggestionsDiv.appendChild(suggestionElement);
+                });
+                document.getElementById('chat-messages').lastChild.appendChild(suggestionsDiv);
             }
         }
 
@@ -53,218 +72,174 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        function getBotResponse(userMessage) {
-            const msg = userMessage.toLowerCase();
-            let response = { text: "", suggestions: [] };
-            
-            // Reset last topic if the user asks a completely different question
-            if (msg.match(/\b(hi|hello|hey|greetings|sup|help|start over)\b/)) {
-                lastTopic = null;
-            }
-            
-            // ========== MATH CALCULATIONS ==========
-            if (msg.match(/\b(\d+[\+\-\*\/]\d+|\d+\s?plus\s?\d+|\d+\s?minus\s?\d+|\d+\s?times\s?\d+|\d+\s?divided by\s?\d+|what is \d+[\+\-\*\/]\d+)\b/) || 
-                lastTopic === 'math') {
-                lastTopic = 'math';
-                
-                try {
-                    // Extract math expression
-                    let mathExpr = msg.replace(/[^\d\+\-\*\/\.]/g, '');
-                    
-                    // Handle worded math questions
-                    if (mathExpr === '' && msg.includes('plus')) {
-                        const nums = msg.match(/\d+/g);
-                        if (nums && nums.length === 2) mathExpr = nums[0] + '+' + nums[1];
-                    }
-                    if (mathExpr === '' && msg.includes('minus')) {
-                        const nums = msg.match(/\d+/g);
-                        if (nums && nums.length === 2) mathExpr = nums[0] + '-' + nums[1];
-                    }
-                    if (mathExpr === '' && msg.includes('times')) {
-                        const nums = msg.match(/\d+/g);
-                        if (nums && nums.length === 2) mathExpr = nums[0] + '*' + nums[1];
-                    }
-                    if (mathExpr === '' && msg.includes('divided by')) {
-                        const nums = msg.match(/\d+/g);
-                        if (nums && nums.length === 2) mathExpr = nums[0] + '/' + nums[1];
-                    }
-                    
-                    // Calculate if we have a valid expression
-                    if (mathExpr.match(/^[\d\+\-\*\/\.]+$/)) {
-                        const result = eval(mathExpr); // Note: Using eval is simple but be careful in production
-                        response.text = `${mathExpr} = ${result}`;
-                        response.suggestions = ["Another calculation", "Main menu"];
-                        return response;
-                    }
-                } catch (e) {
-                    // Fall through to general math response
-                }
-                
-                // General math response if no specific match
-                response.text = "I can help with basic math calculations!\n" +
-                    "Try asking things like:\n" +
-                    "'What is 15 + 27?' or\n" +
-                    "'Calculate 100 divided by 4' or\n" +
-                    "Just type '45 * 3'";
-                response.suggestions = ["123 + 456", "100 / 5", "8 * 9"];
-                return response;
-            }
-            
-            // ========== GREETINGS ==========
-            if (msg.match(/\b(hi|hello|hey|greetings|sup)\b/)) {
-                response.text = getRandomResponse([
-                    "Hello there! I can do math, tech support, recommendations, and more!",
-                    "Hi! I know math, tech, books, movies, and jokes. What would you like?",
-                    "Hey! I can calculate, troubleshoot, and entertain. Ask me anything!"
-                ]);
-                response.suggestions = ["Calculate 15 + 27", "Tech help", "Book recommendation"];
-                return response;
-            }
-            
-            // ========== HELP ==========
-            if (msg.includes('help') || msg.includes('support') || msg.includes('what can you do')) {
-                response.text = "I can help with:\n" +
-                    "- Math calculations\n" +
-                    "- Tech troubleshooting\n" +
-                    "- Book/movie recommendations\n" +
-                    "- Jokes and fun facts\n\n" +
-                    "What would you like help with?";
-                response.suggestions = ["Math problem", "Book recommendation", "Tell me a joke"];
-                lastTopic = 'help';
-                return response;
-            }
-            
-            // ========== TECH SUPPORT ==========
-            if (msg.match(/\b(tech|computer|internet|wifi|printer|phone|device)\b/) || lastTopic === 'tech') {
-                lastTopic = 'tech';
-                
-                if (msg.match(/\b(wifi|internet|connection|online)\b/)) {
-                    response.text = "For WiFi issues:\n" +
-                        "1. Restart your router\n" +
-                        "2. Check if other devices can connect\n" +
-                        "3. Move closer to the router\n" +
-                        "4. Contact your ISP if problems persist";
-                    response.suggestions = ["Printer not working", "Computer is slow", "Back to main menu"];
-                    return response;
-                }
-                
-                if (msg.match(/\b(printer|printing)\b/)) {
-                    response.text = "Printer troubleshooting:\n" +
-                        "1. Check if it's powered on\n" +
-                        "2. Verify paper is loaded\n" +
-                        "3. Restart both printer and computer\n" +
-                        "4. Reinstall drivers if needed";
-                    return response;
-                }
-                
-                if (msg.match(/\b(slow|lagging|freezing)\b/)) {
-                    response.text = "For a slow computer:\n" +
-                        "1. Close unused programs\n" +
-                        "2. Restart your computer\n" +
-                        "3. Check for malware\n" +
-                        "4. Consider upgrading hardware";
-                    return response;
-                }
-                
-                // General tech response if no specific match
-                response.text = "For tech support, try these steps:\n" +
-                    "1. Restart the device\n" +
-                    "2. Check for updates\n" +
-                    "3. Search online for your specific error\n" +
-                    "4. Contact manufacturer support\n\n" +
-                    "What exactly isn't working?";
-                response.suggestions = ["WiFi problems", "Printer issues", "Slow computer"];
-                return response;
-            }
-            
-            // ========== RECOMMENDATIONS ==========
-            if (msg.match(/\b(book|movie|recommend|suggest|watch|read)\b/) || lastTopic === 'recommend') {
-                lastTopic = 'recommend';
-                
-                if (msg.match(/\b(book|read|novel)\b/)) {
-                    const books = [
-                        "Fantasy: 'The Name of the Wind' by Patrick Rothfuss",
-                        "Sci-Fi: 'Project Hail Mary' by Andy Weir",
-                        "Mystery: 'Gone Girl' by Gillian Flynn",
-                        "Classic: 'To Kill a Mockingbird' by Harper Lee"
-                    ];
-                    response.text = "Here are some book recommendations:\n" + books.join("\n");
-                    response.suggestions = ["Movie suggestions", "More books", "Something else"];
-                    return response;
-                }
-                
-                if (msg.match(/\b(movie|film|watch)\b/)) {
-                    const movies = [
-                        "Action: 'John Wick' series",
-                        "Comedy: 'The Grand Budapest Hotel'",
-                        "Sci-Fi: 'Interstellar'",
-                        "Drama: 'The Shawshank Redemption'"
-                    ];
-                    response.text = "Some movie suggestions:\n" + movies.join("\n");
-                    response.suggestions = ["Book recommendations", "More movies", "Different topic"];
-                    return response;
-                }
-                
-                // General recommendation response
-                response.text = "I can recommend books or movies. Which would you prefer?";
-                response.suggestions = ["Book recommendations", "Movie suggestions"];
-                return response;
-            }
-            
-            // ========== FUN/JOKES ==========
-            if (msg.match(/\b(joke|funny|laugh|humor)\b/)) {
-                const jokes = [
-                    "Why don't skeletons fight each other? They don't have the guts!",
-                    "What's the best thing about Switzerland? I don't know, but the flag is a big plus!",
-                    "How do you organize a space party? You planet!",
-                    "Why did the scarecrow win an award? Because he was outstanding in his field!"
-                ];
-                response.text = getRandomResponse(jokes);
-                response.suggestions = ["Another joke", "Tell me a fact", "Different topic"];
-                return response;
-            }
-            
-            if (msg.match(/\b(fact|interesting|learn|teach me)\b/)) {
-                const facts = [
-                    "Honey never spoils - archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old and still edible!",
-                    "Octopuses have three hearts and blue blood.",
-                    "The shortest war in history was between Britain and Zanzibar in 1896 - it lasted only 38 minutes.",
-                    "Bananas are berries, but strawberries aren't."
-                ];
-                response.text = "Did you know?\n" + getRandomResponse(facts);
-                response.suggestions = ["Another fact", "Tell me a joke", "Tech help"];
-                return response;
-            }
-            
-            // ========== TIME/DATE ==========
-            if (msg.match(/\b(time|what time is it|current time)\b/)) {
-                response.text = "The current time is: " + new Date().toLocaleTimeString();
-                return response;
-            }
-            
-            if (msg.match(/\b(date|today's date|what day is it)\b/)) {
-                response.text = "Today is: " + new Date().toLocaleDateString();
-                return response;
-            }
-            
-            // ========== DEFAULT RESPONSE ==========
-            // If we got this far, we didn't understand the question
-            const unknownResponses = [
-                "I'm not quite sure about that. I can help with math, tech, recommendations, and fun facts!",
-                "That's an interesting question! I'm better with math problems, tech help, and recommendations.",
-                "Hmm, I might not know that one. I can calculate math problems or help with other topics."
-            ];
-            
-            response.text = getRandomResponse(unknownResponses) + "\n" +
-                "- Math calculations\n" +
-                "- Tech support\n" +
-                "- Recommendations\n" +
-                "- Fun facts/jokes";
-                
-            response.suggestions = ["Calculate 1 + 1", "Tech help", "Book recommendation"];
-            return response;
-        }
-        
         function getRandomResponse(responses) {
             return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        function safeMathEvaluate(expression) {
+            const clean = expression
+                .replace(/x/gi, '*')
+                .replace(/÷/g, '/')
+                .replace(/−/g, '-')
+                .replace(/\s+/g, '');
+
+            if (!/^[0-9+\-*/().]+$/.test(clean)) {
+                return null;
+            }
+
+            try {
+                const result = Function(`"use strict"; return (${clean});`)();
+                return Number.isFinite(result) ? result : null;
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function extractMathExpression(message) {
+            const normalized = normalizeText(message);
+
+            const direct = normalized.match(/(-?\d+(?:\.\d+)?)\s*(?:\+|plus|minus|-|\*|times|\/|divided by)\s*(-?\d+(?:\.\d+)?)/);
+            if (direct) {
+                const a = direct[1];
+                const b = direct[2];
+                const operator = normalized.includes('plus') ? '+' :
+                    normalized.includes('minus') || normalized.includes('-') ? '-' :
+                    normalized.includes('times') || normalized.includes('*') ? '*' :
+                    normalized.includes('divided by') || normalized.includes('/') ? '/' :
+                    '+';
+
+                return `${a}${operator}${b}`;
+            }
+
+            const simple = normalized.match(/what is\s+(.+)/i);
+            if (simple) {
+                const candidate = simple[1].replace(/\?/g, '').trim();
+                const calc = safeMathEvaluate(candidate);
+                if (calc !== null) {
+                    return candidate;
+                }
+            }
+
+            const plain = normalized.match(/([\d+\-*/().\s]+)/);
+            if (plain) {
+                const candidate = plain[1].replace(/\s+/g, '');
+                if (safeMathEvaluate(candidate) !== null) {
+                    return candidate;
+                }
+            }
+
+            return null;
+        }
+
+        function getBotResponse(userMessage) {
+            const message = userMessage.trim();
+            const msg = normalizeText(message);
+            let response = { text: '', suggestions: [] };
+            const predictedIntent = classifyIntent(message);
+
+            const nameMatch = message.match(/my name is\s+([a-zA-Z]+)/i);
+            if (nameMatch) {
+                state.memory.name = nameMatch[1];
+                response.text = `Nice to meet you, ${nameMatch[1]}! I’m your family chatbot. I can help with study, math, and ideas.`;
+                response.suggestions = ['What can you do?', 'Teach me Japanese', 'Solve 6 * 7'];
+                return response;
+            }
+
+            if (predictedIntent === 'greeting') {
+                state.lastTopic = null;
+                response.text = state.memory.name
+                    ? `Hi ${state.memory.name}! I’m ready to help with questions, study, math, and creativity.`
+                    : 'Hi! I’m your family chatbot. I can help with math, study, tech, recommendations, and quick ideas.';
+                response.suggestions = ['What can you do?', 'Calculate 15 + 27', 'Teach me Japanese'];
+                return response;
+            }
+
+            if (predictedIntent === 'help') {
+                state.lastTopic = 'help';
+                response.text = 'I’m a simple chatbot built into this website. I can do quick math, explain study topics, answer general questions, help with tech issues, and suggest books, jokes, or learning ideas.';
+                response.suggestions = ['Solve 8 * 9', 'Teach me Japanese', 'Book recommendation'];
+                return response;
+            }
+
+            if (predictedIntent === 'study') {
+                state.lastTopic = 'study';
+                response.text = 'Let’s study Japanese in a simple way: start with Hiragana, then Katakana, then common words. Try this: あ = a, き = ki, し = shi, ら = ra. Want a quick lesson or a quiz?';
+                response.suggestions = ['Teach me hiragana', 'How to say hello in Japanese', 'Give me a quiz'];
+                return response;
+            }
+
+            if (predictedIntent === 'math') {
+                state.lastTopic = 'math';
+                const mathExpression = extractMathExpression(message);
+                if (mathExpression) {
+                    const result = safeMathEvaluate(mathExpression);
+                    if (result !== null) {
+                        response.text = `${mathExpression} = ${result}`;
+                        response.suggestions = ['Another calculation', 'What can you do?', 'Teach me Japanese'];
+                        return response;
+                    }
+                }
+                response.text = 'I can help with mathematics. Try examples like 15 + 27, 48 / 6, or 9 * 8.';
+                response.suggestions = ['Calculate 15 + 27', 'What can you do?', 'Teach me Japanese'];
+                return response;
+            }
+
+            if (predictedIntent === 'recommendation') {
+                state.lastTopic = 'recommend';
+                response.text = 'Here are a few good picks: for books, try The Name of the Wind or Project Hail Mary; for movies, try Interstellar or The Grand Budapest Hotel. If you want something more playful, I can suggest for kids, family, or learning.';
+                response.suggestions = ['Book recommendation', 'Movie recommendation', 'Tell me a joke'];
+                return response;
+            }
+
+            if (predictedIntent === 'joke') {
+                response.text = getRandomResponse([
+                    'Why don’t skeletons fight each other? They don’t have the guts!',
+                    'What did one wall say to the other? “I’ll meet you at the corner!”',
+                    'Why was the math book sad? Because it had too many problems.'
+                ]);
+                response.suggestions = ['Another joke', 'Book recommendation', 'Teach me Japanese'];
+                return response;
+            }
+
+            if (predictedIntent === 'tech') {
+                state.lastTopic = 'tech';
+                response.text = 'A good troubleshooting flow is: restart the device, check the connection, update software, and test with one other device. If it is a Wi‑Fi issue, restart the modem and router, then reconnect.';
+                response.suggestions = ['Fix Wi‑Fi', 'Fix printer', 'What can you do?'];
+                return response;
+            }
+
+            if (predictedIntent === 'time') {
+                const now = new Date();
+                response.text = `Right now it is ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} on ${now.toLocaleDateString()}.`;
+                response.suggestions = ['What can you do?', 'Teach me Japanese', 'Tell me a joke'];
+                return response;
+            }
+
+            if (predictedIntent === 'goodbye') {
+                response.text = 'Goodbye! Come back anytime — I’m here for quick questions, study help, and creative ideas.';
+                response.suggestions = ['What can you do?', 'Teach me Japanese'];
+                return response;
+            }
+
+            if (/(hello in japanese|how do you say.*japanese|say.*hello)/.test(msg)) {
+                response.text = 'A common way to say hello in Japanese is こんにちは (konnichiwa). If you want a more casual greeting, you can say こんばんは (konbanwa).';
+                response.suggestions = ['Teach me hiragana', 'How to say thank you?', 'Give me a quiz'];
+                return response;
+            }
+
+            if (/(thank you|thanks)/.test(msg)) {
+                response.text = 'You’re welcome! I’m happy to help. Ask me a math question, a study prompt, or another idea.';
+                response.suggestions = ['Teach me Japanese', 'Solve 12 + 25', 'Tell me a joke'];
+                return response;
+            }
+
+            const generalResponses = [
+                'That sounds interesting. I can help with learning, math, tech questions, or fun ideas. What would you like to explore?',
+                'I’m following your question. Try asking me for a math problem, a study topic, or a recommendation.',
+                'I can help with that. Ask me a simple question and I’ll turn it into a clear answer.'
+            ];
+
+            response.text = getRandomResponse(generalResponses);
+            response.suggestions = ['What can you do?', 'Calculate 25 + 37', 'Teach me Japanese'];
+            return response;
         }
