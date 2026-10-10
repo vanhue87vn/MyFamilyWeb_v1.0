@@ -127,3 +127,9 @@
             align-items: center;
             justify-content: center;
         }
+
+        body { background: radial-gradient(circle at top right,#e7d9ff,#edf7ff 52%,#fff8ed); }
+        .character-box, .timer-box, .history-panel { border:1px solid rgba(112,79,214,.12); box-shadow:0 18px 42px rgba(70,58,131,.12); }
+        #main-character { color:#6548e8; text-shadow:0 10px 30px rgba(101,72,232,.18); }
+        .generate-btn { background:linear-gradient(135deg,#6548e8,#8d6df2); box-shadow:0 8px 17px rgba(101,72,232,.25); }
+        @media (max-width:700px) { .main-panel { flex-direction:column; gap:15px; }.character-box { margin-right:0; padding:24px; } #main-character { font-size:150px; } .timer-box { padding:20px; } #timer { font-size:40px; } }

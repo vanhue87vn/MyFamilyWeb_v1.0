@@ -126,3 +126,7 @@ canvas {
     margin: 5px;
     border-radius: 8px;
 }
+
+body { background: radial-gradient(circle at top, #243b73, #10182f 72%); color: #f8fbff; }
+#game { border: 5px solid #7cdaff; border-radius: 18px; box-shadow: 0 0 0 8px rgba(124,218,255,.12), 0 20px 45px rgba(0,0,0,.35); background: #101a33; }
+.score { color: #fff; padding: 8px 16px; display: inline-block; border-radius: 999px; background: rgba(255,255,255,.12); }

@@ -1,155 +1,85 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Family Web</title>
-
-    <!-- Liên kết file CSS chính -->
+    <meta name="description" content="MyFamilyWeb — a small place for games, learning, and creativity.">
+    <title>MyFamilyWeb | Play, Learn, Create</title>
     <link rel="stylesheet" href="./css/main.css">
-
-    <!-- Liên kết font awesome (nếu muốn sử dụng icon) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <!-- Liên kết file JavaScript chính (để cuối body) -->
 </head>
-
-<body>
-    <!-- Phần Header -->
+<body class="home-page">
     <header class="site-header">
-        <div class="container">
-            <div class="logo">
-                <h1><a> Nhat Minh's Family Website. Tôi đang vui </a></h1>
-            </div>
+        <div class="container nav-bar">
+            <a class="brand" href="index.html" aria-label="MyFamilyWeb home"><span>MF</span> MyFamilyWeb</a>
+            <nav aria-label="Main navigation">
+                <a href="#play">Chơi</a>
+                <a href="#learn-play">Học qua chơi</a>
+                <a href="#learn">Khám phá</a>
+            </nav>
         </div>
     </header>
 
-    <!-- Phần Nội dung chính -->
-    <main class="main-content">
-        <div class="container">
-            <section class="welcome-section">
-                <h2>Chào mừng đến với MyFamilyWeb</h2>
-                <p>Trang web học tập dành cho các thành viên trong gia đình bạn.</p>
-
-                <!-- 4 Danh mục chính -->
-                <div class="categories">
-                    <a href="#play" class="category-card">
-                        <div class="category-icon">
-                            <i class="fas fa-gamepad"></i>
-                        </div>
-                        <h3>Chơi</h3>
-                        <p>Các trò chơi giải trí thú vị</p>
-                    </a>
-
-                    <a href="#play-learn" class="category-card">
-                        <div class="category-icon">
-                            <i class="fas fa-brain"></i>
-                        </div>
-                        <h3>Chơi & Học</h3>
-                        <p>Vừa chơi vừa học hiệu quả</p>
-                    </a>
-
-                    <a href="#learn" class="category-card">
-                        <div class="category-icon">
-                            <i class="fas fa-book"></i>
-                        </div>
-                        <h3>Học</h3>
-                        <p>Tài liệu học tập bổ ích</p>
-                    </a>
-
-                    <a href="#coding" class="category-card">
-                        <div class="category-icon">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <h3>Coding</h3>
-                        <p>Lập trình và sáng tạo</p>
-                    </a>
+    <main>
+        <section class="hero container">
+            <div class="hero-copy">
+                <p class="eyebrow">A little corner for the family</p>
+                <h1>Chơi vui. Học hay.<br><em>Cùng nhau mỗi ngày.</em></h1>
+                <p class="hero-text">Một bộ sưu tập nhỏ các trò chơi, thử thách học tập và dự án sáng tạo dành cho cả gia đình.</p>
+                <div class="hero-actions">
+                    <a class="button primary" href="#play"><i class="fas fa-play"></i> Chọn một trò chơi</a>
+                    <a class="button ghost" href="#learn-play">Khám phá ngay</a>
                 </div>
+            </div>
+            <div class="hero-art" aria-hidden="true">
+                <div class="orb orb-one"></div><div class="orb orb-two"></div>
+                <div class="hero-card card-game"><i class="fas fa-gamepad"></i><span>Play</span></div>
+                <div class="hero-card card-learn"><i class="fas fa-lightbulb"></i><span>Learn</span></div>
+                <div class="hero-card card-create"><i class="fas fa-wand-magic-sparkles"></i><span>Create</span></div>
+            </div>
+        </section>
 
-                <!-- Các phần chi tiết -->
-                <section id="play" class="category-section">
-                    <h2><i class="fas fa-gamepad"></i> Chơi</h2>
-                    <div class="features-grid">
-                        <!-- Các game thuần giải trí -->
-                        <li><a href="./features/feature2/feature2.html">Rắn săn mồi</a></li>
-                        <li><a href="./features/feature3/feature3.html">Game HÌNH VUÔNG ăn con bot</a></li>
-                        <li><a href="./features/feature4/feature4.html">Con bot chơi bóng đá</a></li>
-                        <li><a href="./features/feature8/feature8.html">Xem ai Click nhanh</a></li>
-                        <li><a href="./features/feature9/feature9.html">Xem ai né bóng giỏi</a></li>
-                        <li><a href="./features/feature15/feature15.html">Bóng bàn neon</a></li>
-                        <li><a href="./features/feature16/feature16.html">Flappy Bird</a></li>
-                    </div>
-                </section>
+        <section class="container quick-links" aria-label="Explore by category">
+            <a href="#play"><i class="fas fa-gamepad"></i><span><strong>Chơi</strong>Thử thách & giải trí</span><i class="fas fa-arrow-right"></i></a>
+            <a href="#learn-play"><i class="fas fa-brain"></i><span><strong>Học qua chơi</strong>Kiến thức thật vui</span><i class="fas fa-arrow-right"></i></a>
+            <a href="#learn"><i class="fas fa-book-open"></i><span><strong>Khám phá</strong>Chữ cái & kỹ năng</span><i class="fas fa-arrow-right"></i></a>
+        </section>
 
-                <section id="play-learn" class="category-section">
-                    <h2><i class="fas fa-brain"></i> Chơi & Học</h2>
-                    <div class="features-grid">
+        <section id="play" class="content-section container">
+            <div class="section-heading"><div><p class="eyebrow">Game time</p><h2>Chơi ngay</h2></div><p>Những trò chơi nhanh để cả nhà cùng thử.</p></div>
+            <div class="feature-grid">
+                <a class="feature-card accent-pink" href="./features/feature2/feature2.html"><i class="fas fa-worm"></i><h3>Rắn săn mồi</h3><p>Ăn mồi, lớn lên và đừng đụng tường.</p><span>Chơi <i class="fas fa-arrow-right"></i></span></a>
+                <a class="feature-card accent-purple" href="./features/feature3/feature3.html"><i class="fas fa-circle-dot"></i><h3>Ăn bot</h3><p>Điều khiển hình vuông và chinh phục bản đồ.</p><span>Chơi <i class="fas fa-arrow-right"></i></span></a>
+                <a class="feature-card accent-teal" href="./features/feature8/feature8.html"><i class="fas fa-shield-heart"></i><h3>Né bóng</h3><p>Giữ bình tĩnh và tránh chướng ngại vật.</p><span>Chơi <i class="fas fa-arrow-right"></i></span></a>
+                <a class="feature-card accent-neon" href="./features/feature14/feature14.html"><i class="fas fa-table-tennis-paddle-ball"></i><h3>Bóng bàn neon</h3><p>Phá gạch, nhặt sức mạnh, ghi điểm.</p><span>Chơi <i class="fas fa-arrow-right"></i></span></a>
+                <a class="feature-card accent-yellow" href="./features/feature15/feature15.html"><i class="fas fa-dove"></i><h3>Flappy Bird</h3><p>Bay qua các ống và lập kỷ lục mới.</p><span>Chơi <i class="fas fa-arrow-right"></i></span></a>
+            </div>
+        </section>
 
-                        <!-- Các game vừa chơi vừa học -->
-                        <li><a href="./features/feature5/feature5.html"> Học chữ: Hiragana ball</a></li>
-                        <li><a href="./features/feature7/feature7.html"> Cộng trừ lớp 2</a></li>
-                        <li><a href="./features/feature13/feature13.html"> Facts!!!</a></li>
-                        <li><a href="./features/feature14/feature14.html"> Đoán số</a></li>
-                        <li><a href="./features/feature17/feature17.html"> Game học từ vựng Nhật Bản</a></li>
-                        <!-- Thêm các game khác vào đây -->
-                    </div>
-                </section>
+        <section id="learn-play" class="content-section container">
+            <div class="section-heading"><div><p class="eyebrow">Learn by doing</p><h2>Học qua chơi</h2></div><p>Mỗi lượt chơi là một lần học thêm điều mới.</p></div>
+            <div class="feature-grid compact">
+                <a class="feature-card accent-blue" href="./features/feature4/feature4.html"><i class="fas fa-language"></i><h3>Hiragana Ball</h3><p>Ghép chữ Hiragana với Romaji.</p><span>Khám phá <i class="fas fa-arrow-right"></i></span></a>
+                <a class="feature-card accent-orange" href="./features/feature6/feature6.html"><i class="fas fa-calculator"></i><h3>Cộng trừ lớp 2</h3><p>Luyện tính nhẩm thật nhanh.</p><span>Khám phá <i class="fas fa-arrow-right"></i></span></a>
+                <a class="feature-card accent-pink" href="./features/feature12/feature12.html"><i class="fas fa-circle-question"></i><h3>Fact or Fiction</h3><p>Đâu là thật, đâu là hư cấu?</p><span>Khám phá <i class="fas fa-arrow-right"></i></span></a>
+                <a class="feature-card accent-purple" href="./features/feature13/feature13.html"><i class="fas fa-hashtag"></i><h3>Đoán số</h3><p>Thử tài suy luận của bạn.</p><span>Khám phá <i class="fas fa-arrow-right"></i></span></a>
+                <a class="feature-card accent-teal" href="./features/feature16/feature16.html"><i class="fas fa-torii-gate"></i><h3>Từ vựng Nhật</h3><p>Chọn cấp độ và thử sức ngay.</p><span>Khám phá <i class="fas fa-arrow-right"></i></span></a>
+            </div>
+        </section>
 
-                <section id="learn" class="category-section">
-                    <h2><i class="fas fa-book"></i> Học</h2>
-                    <div class="features-grid">
-                        <!-- Các tài liệu học tập -->
-                        <li><a href="./features/feature1/feature1.html">Bảng chữ cái Hiragana</a></li>
-                        <li><a href="./features/feature11/feature11.html">Bảng chữ cái Alphabet</a></li>
-                        <li><a href="./features/feature12/feature12.html">Bảng chữ cái Hiragana và Clock</a></li>
-                        <!-- Thêm tài liệu học tập khác vào đây -->
-                    </div>
-                </section>
-
-                <section id="coding" class="category-section">
-                    <h2><i class="fas fa-code"></i> Coding</h2>
-                    <div class="features-grid">
-                        <!-- Các project coding -->
-                        <li><a href="./features/feature6/feature6.html">Tạo máy tính Calculator</a></li>
-                        <li><a href="./features/feature10/feature10.html"> Ultimate Chatbot</a></li>
-                        <!-- Thêm project coding khác vào đây -->
-                    </div>
-                </section>
-            </section>
-        </div>
+        <section id="learn" class="content-section container">
+            <div class="section-heading"><div><p class="eyebrow">Explore & create</p><h2>Khám phá</h2></div><p>Những công cụ nhỏ nhưng hữu ích để luyện tập và sáng tạo.</p></div>
+            <div class="feature-grid compact">
+                <a class="feature-card accent-pink" href="./features/feature1/feature1.html"><i class="fas fa-font"></i><h3>Bảng Hiragana</h3><p>Ghi nhớ chữ cái cơ bản.</p><span>Mở <i class="fas fa-arrow-right"></i></span></a>
+                <a class="feature-card accent-blue" href="./features/feature10/feature10.html"><i class="fas fa-a"></i><h3>Bảng Alphabet</h3><p>Làm quen với bảng chữ cái.</p><span>Mở <i class="fas fa-arrow-right"></i></span></a>
+                <a class="feature-card accent-purple" href="./features/feature11/feature11.html"><i class="fas fa-clock"></i><h3>Hiragana Clock</h3><p>Chữ cái ngẫu nhiên & đồng hồ.</p><span>Mở <i class="fas fa-arrow-right"></i></span></a>
+                <a class="feature-card accent-orange" href="./features/feature5/feature5.html"><i class="fas fa-calculator"></i><h3>Calculator</h3><p>Máy tính bỏ túi đơn giản.</p><span>Mở <i class="fas fa-arrow-right"></i></span></a>
+                <a class="feature-card accent-teal" href="./features/feature9/feature9.html"><i class="fas fa-comments"></i><h3>Ultimate Chatbot</h3><p>Một người bạn trò chuyện vui vẻ.</p><span>Mở <i class="fas fa-arrow-right"></i></span></a>
+            </div>
+        </section>
     </main>
 
-    <!-- Phần Footer -->
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-about">
-                <h3>About MyFamilyWeb</h3>
-                <p>Dự án nhỏ giúp các thành viên trong gia đình cùng nhau học tập và phát triển.</p>
-            </div>
-
-            <div class="footer-contact">
-                <h3>Liên hệ</h3>
-                <p>Email: nhatminh16vn@gmail.com</p>
-            </div>
-            <div class="footer-links">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="index.html">Trang chủ</a></li>
-                    <li><a href="ReleaseNote.html">Release Notes</a></li>
-                    <li><a href="Privacy.html">Chính sách riêng tư</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="copyright">
-            <p>&copy; 2025 MyFamilyWeb. Tất cả quyền được bảo lưu.</p>
-        </div>
-    </footer>
-
-    <!-- Liên kết file JavaScript -->
-    <script src="./js/utils/helpers.js"></script>
-    <script src="./js/app.js"></script>
+    <footer class="site-footer"><div class="container footer-content"><div><a class="brand" href="index.html"><span>MF</span> MyFamilyWeb</a><p>Một dự án nhỏ để gia đình cùng chơi, học và sáng tạo.</p></div><div class="footer-nav"><a href="ReleaseNote.html">Release notes</a><a href="Privacy.html">Chính sách riêng tư</a><a href="mailto:nhatminh16vn@gmail.com">Liên hệ</a></div></div><p class="copyright">© 2025 MyFamilyWeb</p></footer>
+    <script src="./js/utils/helpers.js"></script><script src="./js/app.js"></script>
 </body>
-
 </html>

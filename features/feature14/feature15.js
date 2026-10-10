@@ -3,22 +3,22 @@
 // ======================
 const DIFFICULTY = {
   INITIAL_BALL_SPEED: 7,
-  SPEED_INCREASE_PER_LEVEL: 20,
-  BRICK_DURABILITY: 5,
-  GRAVITY: 0.1,
+  SPEED_INCREASE_PER_LEVEL: 1.25,
+  BRICK_DURABILITY: 2,
+  GRAVITY: 0,
   BOUNCE_DECAY: 1,
   TIME_LIMIT: 100, // 100 seconds
   TIME_DECREASE_PER_LEVEL: 5,
   BALL_GROWTH_PER_LEVEL: 0.5,
-  RANDOM_TELEPORT_CHANCE: 0.01,
-  SPEED_MULTIPLIER: 10, // Speed multiplier for speed-up bricks
+  RANDOM_TELEPORT_CHANCE: 0,
+  SPEED_MULTIPLIER: 1.2,
   PADDLE_SHRINK_PER_SECOND: 0.75, // Paddle shrinks by 0.75 pixels per second
   TIMER_WARNING_THRESHOLD: 10, // 10 seconds
   COMBO_THRESHOLD: 2, // Combo starts at 2 hits
-  COMBO_DECAY_TIME: 1, // 1 millisecond
-  POWER_UP_CHANCE: 1, // 100% chance for power-up drop
+  COMBO_DECAY_TIME: 1200,
+  POWER_UP_CHANCE: 0.2,
   POWER_UP_SPEED: 2, // Speed of power-ups falling
-  SCREEN_SHAKE_DURATION: 3600000 // 1 hour
+  SCREEN_SHAKE_DURATION: 350
 };
 
 // Power-up types
@@ -55,6 +55,7 @@ let gameOverShown = false;
 // ======================
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
+const gameContainer = document.getElementById('gameContainer');
 const startScreen = document.getElementById('startScreen');
 const startButton = document.getElementById('startButton');
 const scoreElement = document.getElementById('score');
@@ -758,7 +759,7 @@ function startGame() {
   // Reset game state
   gameRunning = true;
   score = 0;
-  lives = 1;
+  lives = 3;
   level = 1;
   timeLeft = DIFFICULTY.TIME_LIMIT;
   paddleControlReversed = false;
@@ -772,7 +773,7 @@ function startGame() {
 
   // Reset UI
   scoreElement.textContent = '0';
-  livesElement.textContent = '1';
+  livesElement.textContent = '3';
   levelElement.textContent = '1';
   timeElement.textContent = timeLeft;
   comboDisplay.style.opacity = '0';

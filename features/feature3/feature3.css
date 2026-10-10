@@ -28,7 +28,7 @@
             z-index: 100;
         }
 
-        #gameOver {
+#gameOver {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -39,4 +39,7 @@
             display: none;
             text-shadow: 0 0 10px white;
             z-index: 100;
-        }
+}
+
+#score { top: 18px; left: 18px; padding: 10px 16px; border: 1px solid rgba(255,255,255,.18); border-radius: 14px; background: rgba(12,16,33,.7); backdrop-filter: blur(8px); }
+#controls { bottom: 18px; left: 18px; padding: 10px 14px; border-radius: 12px; background: rgba(12,16,33,.7); }

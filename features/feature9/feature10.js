@@ -261,7 +261,7 @@
                 "- Recommendations\n" +
                 "- Fun facts/jokes";
                 
-            response.suggestions = ["Calculate 45 + 67", "Tech help", "Book recommendation"];
+            response.suggestions = ["Calculate 1 + 1", "Tech help", "Book recommendation"];
             return response;
         }
         
